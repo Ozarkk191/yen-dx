@@ -56,7 +56,7 @@ class _HomePageState extends State<HomePage> {
                           username: 'Username',
                           date: 'March 23 2020',
                           pathAvater:
-                              'https://lh3.googleusercontent.com/proxy/1eLniNpajQ1-cbpOt2vb4s3rnBo09LgF3EjmuQ9mX_uBfmAim-Ui3supJCzVy1C249I1KEwOs7sBVU_M4kkEAS4PWwZNkvlnhyIOKdzFYVvCxEuozYHs7Sy99DGvBea_QrvAWA',
+                              'https://i.ytimg.com/vi/AxLH0lXEGAY/hqdefault.jpg',
                           width: _width,
                           text:
                               'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',

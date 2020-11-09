@@ -81,7 +81,7 @@ class _PostPageState extends State<PostPage> {
         children: [
           AvaterProfile(
             pathAvater:
-                'https://lh3.googleusercontent.com/proxy/1eLniNpajQ1-cbpOt2vb4s3rnBo09LgF3EjmuQ9mX_uBfmAim-Ui3supJCzVy1C249I1KEwOs7sBVU_M4kkEAS4PWwZNkvlnhyIOKdzFYVvCxEuozYHs7Sy99DGvBea_QrvAWA',
+                'https://upload.wikimedia.org/wikipedia/en/thumb/b/b0/Avatar-Teaser-Poster.jpg/220px-Avatar-Teaser-Poster.jpg',
             size: 80,
           ),
           Column(

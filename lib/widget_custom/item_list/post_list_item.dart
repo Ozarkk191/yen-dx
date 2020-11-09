@@ -103,7 +103,7 @@ class PostListItem extends StatelessWidget {
                   Container(
                     child: Image.network(
                       "$pathImage",
-                      fit: BoxFit.cover,
+                      fit: BoxFit.contain,
                       width: pathImage != null ? width : 0,
                     ),
                   ),

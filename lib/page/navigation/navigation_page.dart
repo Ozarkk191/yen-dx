@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:yen/page/home/home_page.dart';
 import 'package:yen/page/login/login_page.dart';
+import 'package:yen/page/member/member_page.dart';
 import 'package:yen/page/post/post_page.dart';
 import 'package:yen/page/profile/profile_page.dart';
-import 'package:yen/page/profile/profile_page3.dart';
 
 class NavigationPage extends StatefulWidget {
   @override
@@ -16,8 +16,7 @@ class _NavigationPageState extends State<NavigationPage> {
     HomePage(),
     ProfilePage(),
     PostPage(),
-    ProfilePage3(),
-    ProfilePage(),
+    MemberPage(),
     LoginPage(),
   ];
 
