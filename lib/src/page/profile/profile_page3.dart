@@ -1,17 +1,25 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:yen/page/navigation/navigation_page.dart';
-import 'package:yen/page/register/register_page.dart';
-import 'package:yen/widget_custom/button/back_button.dart';
-import 'package:yen/widget_custom/button/non_corner_button.dart';
-import 'package:yen/widget_custom/line/line.dart';
-import 'package:yen/widget_custom/textfield/main_textfield.dart';
+import 'package:yen/src/page/register/register_page.dart';
+import 'package:yen/src/page/splash/splash_page.dart';
+import 'package:yen/src/widget_custom/button/back_button.dart';
+import 'package:yen/src/widget_custom/button/non_corner_button.dart';
+import 'package:yen/src/widget_custom/line/line.dart';
+import 'package:yen/src/widget_custom/textfield/main_textfield.dart';
 
-class ProfilePage extends StatefulWidget {
+class ProfilePage3 extends StatefulWidget {
   @override
-  _ProfilePageState createState() => _ProfilePageState();
+  _ProfilePage3State createState() => _ProfilePage3State();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _ProfilePage3State extends State<ProfilePage3> {
+  void _logout() async {
+    await FirebaseAuth.instance.signOut().whenComplete(() {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => SplashPage()));
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -103,7 +111,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 SizedBox(height: 10),
                 NonCornerButton(
-                  textButton: "Submit",
+                  textButton: "Save",
                   textColor: Color(0xffffffff),
                   borderRadius: 40,
                   padding: 0,
@@ -111,10 +119,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   width: MediaQuery.of(context).size.width / 2.7,
                   textSize: 20,
                   onTap: () {
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => NavigationPage()));
+                    _logout();
                   },
                 ),
               ],

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:yen/widget_custom/card/avater_profile.dart';
+import 'package:yen/src/widget_custom/card/avater_profile.dart';
 
 class PostListItem extends StatelessWidget {
   final double width;

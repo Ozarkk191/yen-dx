@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:yen/page/register/register_page.dart';
-import 'package:yen/widget_custom/button/non_corner_button.dart';
-import 'package:yen/widget_custom/line/line.dart';
+import 'package:yen/src/page/register/register_page.dart';
+import 'package:yen/src/widget_custom/button/non_corner_button.dart';
+import 'package:yen/src/widget_custom/line/line.dart';
 
 class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    int _type = 0;
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Stack(
         children: [
           Container(
@@ -39,10 +41,11 @@ class LoginPage extends StatelessWidget {
                 NonCornerButton(
                   textButton: "Join now",
                   onTap: () {
+                    _type = 0;
                     Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => RegisterPage()));
+                            builder: (context) => RegisterPage(type: _type)));
                   },
                 ),
                 SizedBox(height: 10),
@@ -69,7 +72,13 @@ class LoginPage extends StatelessWidget {
                   padding: 0,
                   color: Color(0xffE6F5FC),
                   width: MediaQuery.of(context).size.width / 1.6,
-                  onTap: () {},
+                  onTap: () {
+                    _type = 1;
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => RegisterPage(type: _type)));
+                  },
                 ),
               ],
             ),

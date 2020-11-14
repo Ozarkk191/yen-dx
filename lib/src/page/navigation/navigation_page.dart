@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:yen/page/home/home_page.dart';
-import 'package:yen/page/login/login_page.dart';
-import 'package:yen/page/member/member_page.dart';
-import 'package:yen/page/post/post_page.dart';
-import 'package:yen/page/profile/profile_page.dart';
+import 'package:yen/src/page/home/home_page.dart';
+import 'package:yen/src/page/login/login_page.dart';
+import 'package:yen/src/page/member/member_page.dart';
+import 'package:yen/src/page/post/post_page.dart';
+import 'package:yen/src/page/profile/profile_page3.dart';
 
 class NavigationPage extends StatefulWidget {
   @override
@@ -14,7 +14,7 @@ class _NavigationPageState extends State<NavigationPage> {
   int _selectedIndex = 0;
   List<Widget> _widgetOptions = <Widget>[
     HomePage(),
-    ProfilePage(),
+    ProfilePage3(),
     PostPage(),
     MemberPage(),
     LoginPage(),

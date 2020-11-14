@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:yen/page/profile/profile_page.dart';
-import 'package:yen/page/register/register_page.dart';
-import 'package:yen/widget_custom/button/back_button.dart';
-import 'package:yen/widget_custom/button/non_corner_button.dart';
-import 'package:yen/widget_custom/line/line.dart';
-import 'package:yen/widget_custom/textfield/main_textfield.dart';
+import 'package:yen/src/page/profile/profile_page.dart';
+import 'package:yen/src/page/register/register_page.dart';
+import 'package:yen/src/widget_custom/button/back_button.dart';
+import 'package:yen/src/widget_custom/button/non_corner_button.dart';
+import 'package:yen/src/widget_custom/line/line.dart';
+import 'package:yen/src/widget_custom/textfield/main_textfield.dart';
 
-class ProfilePage3 extends StatefulWidget {
+class ProfilePage2 extends StatefulWidget {
   @override
-  _ProfilePage3State createState() => _ProfilePage3State();
+  _ProfilePage2State createState() => _ProfilePage2State();
 }
 
-class _ProfilePage3State extends State<ProfilePage3> {
+class _ProfilePage2State extends State<ProfilePage2> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -102,18 +102,41 @@ class _ProfilePage3State extends State<ProfilePage3> {
                   ),
                 ),
                 SizedBox(height: 10),
-                NonCornerButton(
-                  textButton: "Save",
-                  textColor: Color(0xffffffff),
-                  borderRadius: 40,
-                  padding: 0,
-                  color: Color(0xff80D3F6),
-                  width: MediaQuery.of(context).size.width / 2.7,
-                  textSize: 20,
-                  onTap: () {
-                    Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (context) => ProfilePage()));
-                  },
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    NonCornerButton(
+                      textButton: "Edit",
+                      textColor: Color(0xffffffff),
+                      borderRadius: 40,
+                      padding: 0,
+                      color: Color(0xff80D3F6),
+                      width: MediaQuery.of(context).size.width / 2.7,
+                      textSize: 20,
+                      onTap: () {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ProfilePage()));
+                      },
+                    ),
+                    SizedBox(width: 10),
+                    NonCornerButton(
+                      textButton: "Logout",
+                      textColor: Color(0xffffffff),
+                      borderRadius: 40,
+                      padding: 0,
+                      color: Color(0xffEC2024),
+                      width: MediaQuery.of(context).size.width / 2.7,
+                      textSize: 20,
+                      onTap: () {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ProfilePage()));
+                      },
+                    ),
+                  ],
                 ),
               ],
             ),

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:yen/widget_custom/button/non_corner_button.dart';
-import 'package:yen/widget_custom/card/avater_profile.dart';
-import 'package:yen/widget_custom/line/line.dart';
-import 'package:yen/widget_custom/textfield/post_textfield.dart';
+import 'package:yen/src/widget_custom/button/non_corner_button.dart';
+import 'package:yen/src/widget_custom/card/avater_profile.dart';
+import 'package:yen/src/widget_custom/line/line.dart';
+import 'package:yen/src/widget_custom/textfield/post_textfield.dart';
 
 class PostPage extends StatefulWidget {
   @override

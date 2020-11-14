@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:yen/widget_custom/button/back_button2.dart';
-import 'package:yen/widget_custom/card/avater_profile.dart';
-import 'package:yen/widget_custom/icon/icon_and_text.dart';
-import 'package:yen/widget_custom/item_list/member_list_item.dart';
-import 'package:yen/widget_custom/textfield/search_textfield.dart';
+import 'package:yen/src/widget_custom/button/back_button2.dart';
+import 'package:yen/src/widget_custom/item_list/member_list_item.dart';
+import 'package:yen/src/widget_custom/textfield/search_textfield.dart';
 
 import 'member_detail_page.dart';
 

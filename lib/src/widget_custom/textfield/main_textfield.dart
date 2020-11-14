@@ -4,12 +4,14 @@ class MainTextField extends StatelessWidget {
   final String labelText;
   final TextEditingController controller;
   final bool obscureText;
+  final bool enabled;
 
   const MainTextField({
     Key key,
     @required this.labelText,
     this.controller,
     this.obscureText = false,
+    this.enabled = true,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -18,6 +20,7 @@ class MainTextField extends StatelessWidget {
       height: 40,
       child: Center(
         child: TextField(
+          enabled: enabled,
           obscureText: obscureText,
           controller: controller,
           decoration: InputDecoration(

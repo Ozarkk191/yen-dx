@@ -2,9 +2,9 @@ import 'dart:ui';
 
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
-import 'package:yen/widget_custom/item_list/post_list_item.dart';
-import 'package:yen/widget_custom/line/line.dart';
-import 'package:yen/widget_custom/textfield/search_textfield.dart';
+import 'package:yen/src/widget_custom/item_list/post_list_item.dart';
+import 'package:yen/src/widget_custom/line/line.dart';
+import 'package:yen/src/widget_custom/textfield/search_textfield.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -77,8 +77,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _selecteMenu(String menu, BuildContext context) {
-    //to do
+    // _logout();
   }
+
   Stack _lineToggle(BuildContext context) {
     return Stack(
       children: [

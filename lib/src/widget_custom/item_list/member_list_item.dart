@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:yen/widget_custom/card/avater_profile.dart';
-import 'package:yen/widget_custom/icon/icon_and_text.dart';
+import 'package:yen/src/widget_custom/card/avater_profile.dart';
+import 'package:yen/src/widget_custom/icon/icon_and_text.dart';
 
 class MemberListItem extends StatelessWidget {
   final String imageUrl;

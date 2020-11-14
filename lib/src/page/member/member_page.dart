@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:yen/page/member/member_list_page.dart';
-import 'package:yen/widget_custom/card/avater_profile.dart';
-import 'package:yen/widget_custom/icon/icon_and_text.dart';
+import 'package:yen/src/widget_custom/card/avater_profile.dart';
+import 'package:yen/src/widget_custom/icon/icon_and_text.dart';
+
+import 'member_list_page.dart';
 
 class MemberPage extends StatefulWidget {
   @override

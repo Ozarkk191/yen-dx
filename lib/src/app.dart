@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:yen/page/splash/splash_page.dart';
+import 'package:yen/src/page/splash/splash_page.dart';
 
 class MyApp extends StatelessWidget {
   @override
