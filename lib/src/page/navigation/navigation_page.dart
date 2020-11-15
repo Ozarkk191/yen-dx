@@ -3,7 +3,7 @@ import 'package:yen/src/page/home/home_page.dart';
 import 'package:yen/src/page/login/login_page.dart';
 import 'package:yen/src/page/member/member_page.dart';
 import 'package:yen/src/page/post/post_page.dart';
-import 'package:yen/src/page/profile/profile_page3.dart';
+import 'package:yen/src/page/profile/profile_page2.dart';
 
 class NavigationPage extends StatefulWidget {
   @override
@@ -14,7 +14,7 @@ class _NavigationPageState extends State<NavigationPage> {
   int _selectedIndex = 0;
   List<Widget> _widgetOptions = <Widget>[
     HomePage(),
-    ProfilePage3(),
+    ProfilePage2(),
     PostPage(),
     MemberPage(),
     LoginPage(),
@@ -38,23 +38,24 @@ class _NavigationPageState extends State<NavigationPage> {
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            title: Text('HOME'),
+            label: 'HOME',
+            // title: Text('HOME'),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person_outline),
-            title: Text('PROFILE'),
+            label: 'PROFILE',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.add_comment),
-            title: Text('POST'),
+            label: 'POST',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.people_outline),
-            title: Text('MEMBER'),
+            label: 'MEMBER',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.chat),
-            title: Text('CHAT'),
+            label: 'CHAT',
           ),
         ],
         currentIndex: _selectedIndex,

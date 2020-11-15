@@ -1,11 +1,16 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:yen/models/user_model.dart';
 import 'package:yen/src/page/login/login_page.dart';
 import 'package:yen/src/page/navigation/navigation_page.dart';
 import 'package:yen/src/page/profile/profile_page.dart';
+import 'package:yen/statics/list_satatic.dart';
+import 'package:yen/statics/model_satatic.dart';
+import 'package:yen/statics/string_static.dart';
 
 class SplashPage extends StatefulWidget {
   @override
@@ -18,6 +23,20 @@ class _SplashPageState extends State<SplashPage> {
     Timer(Duration(seconds: 3), () {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => LoginPage()));
+    });
+  }
+
+  void _getData() async {
+    FirebaseFirestore _database = FirebaseFirestore.instance;
+    await _database
+        .collection("Users")
+        .doc(StringStatic.uid)
+        .get()
+        .then((value) {
+      ModelStatic.user = UserModel.fromJson(value.data());
+    }).then((value) {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => NavigationPage()));
     });
   }
 
@@ -36,8 +55,9 @@ class _SplashPageState extends State<SplashPage> {
       }).then((value) {
         var uid = _uidList.where((element) => element == user.uid).toList();
         if (uid.length != 0) {
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => NavigationPage()));
+          StringStatic.uid = user.uid;
+          // log("${user.uid}");
+          _getData();
         } else {
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) => ProfilePage(user: user)));
@@ -51,7 +71,18 @@ class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     _checkUser();
+    _getPostUID();
     super.initState();
+  }
+
+  void _getPostUID() async {
+    FirebaseFirestore _database = FirebaseFirestore.instance;
+    await _database.collection("Users").get().then((QuerySnapshot snapshot) {
+      snapshot.docs.forEach((value) {
+        log("--------------------------------${value.id}");
+        ListStatic.uidList.add(value.id);
+      });
+    });
   }
 
   @override

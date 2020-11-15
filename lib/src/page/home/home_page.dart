@@ -1,10 +1,17 @@
+import 'dart:developer';
 import 'dart:ui';
 
 import 'package:badges/badges.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:yen/models/post_model.dart';
+import 'package:yen/models/user_model.dart';
 import 'package:yen/src/widget_custom/item_list/post_list_item.dart';
 import 'package:yen/src/widget_custom/line/line.dart';
 import 'package:yen/src/widget_custom/textfield/search_textfield.dart';
+import 'package:yen/statics/list_satatic.dart';
+import 'package:yen/statics/model_satatic.dart';
+import 'package:yen/statics/string_static.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -12,8 +19,59 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  FirebaseFirestore _database = FirebaseFirestore.instance;
   int _position = 1;
   List<String> menuList = ["commented on your post", "likes a your post"];
+
+  @override
+  void initState() {
+    _getData();
+    _getPostID();
+    // _getPost();
+    super.initState();
+  }
+
+  void _getPostID() async {
+    for (var i = 0; i < ListStatic.uidList.length; i++) {
+      log(ListStatic.uidList[i]);
+      await _database
+          .collection("Posts")
+          .doc(ListStatic.uidList[i])
+          .collection("detail")
+          .get()
+          .then((QuerySnapshot snapshot) {
+        snapshot.docs.forEach((value) {
+          log(value.id.toString());
+          _getPost(ListStatic.uidList[i], value.id);
+        });
+      });
+    }
+  }
+
+  void _getPost(String uid, String id) async {
+    ListStatic.postList.clear();
+    await _database
+        .collection("Posts")
+        .doc(uid)
+        .collection("detail")
+        .doc(id)
+        .get()
+        .then((value) {
+      PostModel post = PostModel.fromJson(value.data());
+      ListStatic.postList.add(post);
+      setState(() {});
+    });
+  }
+
+  void _getData() async {
+    await _database
+        .collection("Users")
+        .doc(StringStatic.uid)
+        .get()
+        .then((value) {
+      ModelStatic.user = UserModel.fromJson(value.data());
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,20 +111,25 @@ class _HomePageState extends State<HomePage> {
                         double _width =
                             MediaQuery.of(context).size.width * 0.65;
                         return PostListItem(
-                          username: 'Username',
-                          date: 'March 23 2020',
-                          pathAvater:
-                              'https://i.ytimg.com/vi/AxLH0lXEGAY/hqdefault.jpg',
+                          username: ListStatic.postList[index].displayname,
+                          date: ListStatic.postList[index].timePost,
+                          pathAvater: ListStatic.postList[index].avatarUrl,
                           width: _width,
                           text:
-                              'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
-                          totalComments: '123',
-                          totalLike: '122',
-                          pathImage:
-                              'https://storage.googleapis.com/techsauce-prod/ugc/uploads/2019/11/1200_800_AC7CC6E9-9753-4D21-A84B-E426B608C4C9.jpeg',
+                              "${ListStatic.postList[index].topic}\n${ListStatic.postList[index].content}",
+                          totalComments:
+                              ListStatic.postList[index].comment == null
+                                  ? ""
+                                  : ListStatic.postList[index].comment.length
+                                      .toString(),
+                          totalLike:
+                              ListStatic.postList[index].totalLike.toString(),
+                          pathImage: ListStatic.postList[index].imageUrl == ""
+                              ? null
+                              : ListStatic.postList[index].imageUrl,
                         );
                       },
-                      itemCount: 10,
+                      itemCount: ListStatic.postList.length,
                     )
                   : Container(),
             ],
@@ -210,7 +273,7 @@ class _HomePageState extends State<HomePage> {
                   color: Color(0xffCBCBCA),
                   borderRadius: new BorderRadius.all(Radius.circular(50)),
                   image: DecorationImage(
-                    image: AssetImage("assets/images/avatar_profile2.png"),
+                    image: NetworkImage(ModelStatic.user.avatarUrl),
                     fit: BoxFit.cover,
                   ),
                 ),

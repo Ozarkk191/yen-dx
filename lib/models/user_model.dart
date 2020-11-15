@@ -11,6 +11,7 @@ class UserModel {
   String business;
   String displayname;
   String uid;
+  String notitoken;
 
   UserModel({
     @required this.avatarUrl,
@@ -23,6 +24,7 @@ class UserModel {
     @required this.business,
     @required this.displayname,
     @required this.uid,
+    @required this.notitoken,
   });
 
   UserModel.fromJson(Map<String, dynamic> json)
@@ -35,7 +37,8 @@ class UserModel {
         email = json['email'],
         business = json['business'],
         displayname = json['displayname'],
-        uid = json['uid'];
+        uid = json['uid'],
+        notitoken = json['notitoken'];
 
   toJson() {
     return {
@@ -49,6 +52,7 @@ class UserModel {
       "business": business,
       "displayname": displayname,
       "uid": uid,
+      "notitoken": notitoken,
     };
   }
 }

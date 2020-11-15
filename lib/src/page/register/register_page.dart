@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:loading_overlay/loading_overlay.dart';
 import 'package:toast/toast.dart';
 import 'package:yen/src/page/login/login_page.dart';
 import 'package:yen/src/page/profile/profile_page.dart';
@@ -22,6 +23,7 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController _email = TextEditingController();
   TextEditingController _password = TextEditingController();
   List<String> _allowedEmailList = List<String>();
+  bool _loading = false;
 
   @override
   void initState() {
@@ -64,6 +66,9 @@ class _RegisterPageState extends State<RegisterPage> {
       Toast.show("Password ต้องไม่น้อยกว่า 6 ตัวอักษร", context,
           duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
     } else {
+      setState(() {
+        _loading = true;
+      });
       if (widget.type == 1) {
         _login(email: email, password: password);
       } else {
@@ -88,6 +93,9 @@ class _RegisterPageState extends State<RegisterPage> {
               duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
         });
         if (userCredential.user != null) {
+          setState(() {
+            _loading = false;
+          });
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
@@ -115,6 +123,9 @@ class _RegisterPageState extends State<RegisterPage> {
           .signInWithEmailAndPassword(email: email, password: password);
       // log("userCredential");
       if (userCredential.user != null) {
+        setState(() {
+          _loading = false;
+        });
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -138,73 +149,76 @@ class _RegisterPageState extends State<RegisterPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage("assets/images/bg_main.png"),
-                fit: BoxFit.cover,
+        child: LoadingOverlay(
+          isLoading: _loading,
+          child: SingleChildScrollView(
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("assets/images/bg_main.png"),
+                  fit: BoxFit.cover,
+                ),
               ),
-            ),
-            child: Column(
-              children: [
-                BackButtonArrow(
-                  callback: () {
-                    Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (context) => LoginPage()));
-                  },
-                ),
-                Container(
-                  margin: EdgeInsets.only(
-                    top: MediaQuery.of(context).size.height / 5.5,
+              child: Column(
+                children: [
+                  BackButtonArrow(
+                    callback: () {
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (context) => LoginPage()));
+                    },
                   ),
-                  child: Stack(
-                    children: [
-                      Image.asset(
-                        "assets/images/frame.png",
-                        width: MediaQuery.of(context).size.width - 80,
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: 100),
-                        width: MediaQuery.of(context).size.width - 80,
-                        child: Column(
-                          children: [
-                            MainTextField(
-                              labelText: 'E-mail',
-                              controller: _email,
-                            ),
-                            SizedBox(height: 10),
-                            MainTextField(
-                              labelText: 'Password',
-                              controller: _password,
-                              obscureText: true,
-                            ),
-                            SizedBox(height: 40),
-                            NonCornerButton(
-                              textButton:
-                                  widget.type == 1 ? "SIGN IN" : "SIGN UP",
-                              textColor: Color(0xff676767),
-                              borderRadius: 10,
-                              padding: 0,
-                              color: Color(0xffE6F5FC),
-                              width: MediaQuery.of(context).size.width / 2,
-                              onTap: () {
-                                _checkField(
-                                  email: _email.text,
-                                  password: _password.text,
-                                );
-                              },
-                            ),
-                          ],
+                  Container(
+                    margin: EdgeInsets.only(
+                      top: MediaQuery.of(context).size.height / 5.5,
+                    ),
+                    child: Stack(
+                      children: [
+                        Image.asset(
+                          "assets/images/frame.png",
+                          width: MediaQuery.of(context).size.width - 80,
                         ),
-                      )
-                    ],
+                        Container(
+                          margin: EdgeInsets.only(top: 100),
+                          width: MediaQuery.of(context).size.width - 80,
+                          child: Column(
+                            children: [
+                              MainTextField(
+                                labelText: 'E-mail',
+                                controller: _email,
+                              ),
+                              SizedBox(height: 10),
+                              MainTextField(
+                                labelText: 'Password',
+                                controller: _password,
+                                obscureText: true,
+                              ),
+                              SizedBox(height: 40),
+                              NonCornerButton(
+                                textButton:
+                                    widget.type == 1 ? "SIGN IN" : "SIGN UP",
+                                textColor: Color(0xff676767),
+                                borderRadius: 10,
+                                padding: 0,
+                                color: Color(0xffE6F5FC),
+                                width: MediaQuery.of(context).size.width / 2,
+                                onTap: () {
+                                  _checkField(
+                                    email: _email.text,
+                                    password: _password.text,
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-                SizedBox(height: 10),
-                Text("Already have an account?")
-              ],
+                  SizedBox(height: 10),
+                  Text("Already have an account?")
+                ],
+              ),
             ),
           ),
         ),

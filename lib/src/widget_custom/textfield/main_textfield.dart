@@ -5,6 +5,8 @@ class MainTextField extends StatelessWidget {
   final TextEditingController controller;
   final bool obscureText;
   final bool enabled;
+  final int maxLength;
+  final TextInputType keyboardType;
 
   const MainTextField({
     Key key,
@@ -12,6 +14,8 @@ class MainTextField extends StatelessWidget {
     this.controller,
     this.obscureText = false,
     this.enabled = true,
+    this.maxLength,
+    this.keyboardType = TextInputType.text,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -21,8 +25,13 @@ class MainTextField extends StatelessWidget {
       child: Center(
         child: TextField(
           enabled: enabled,
+          maxLength: maxLength,
           obscureText: obscureText,
           controller: controller,
+          keyboardType: keyboardType,
+          buildCounter: (BuildContext context,
+                  {int currentLength, int maxLength, bool isFocused}) =>
+              null,
           decoration: InputDecoration(
             border: OutlineInputBorder(
               borderSide: new BorderSide(

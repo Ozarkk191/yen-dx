@@ -4,10 +4,15 @@ class PostTextField extends StatelessWidget {
   final String hint;
   final int maxLength;
   final int maxLines;
+  final TextEditingController controller;
 
-  const PostTextField(
-      {Key key, this.hint, this.maxLength = 120, this.maxLines = 1})
-      : super(key: key);
+  const PostTextField({
+    Key key,
+    this.hint,
+    this.maxLength,
+    this.maxLines,
+    this.controller,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -15,6 +20,7 @@ class PostTextField extends StatelessWidget {
       child: TextField(
         maxLength: maxLength,
         maxLines: maxLines,
+        controller: controller,
         decoration: InputDecoration(
             filled: true,
             fillColor: Colors.white,
