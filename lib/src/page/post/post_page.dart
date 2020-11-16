@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:toast/toast.dart';
 import 'package:yen/models/post_model.dart';
+import 'package:yen/src/page/navigation/navigation_page.dart';
 import 'package:yen/src/widget_custom/button/non_corner_button.dart';
 import 'package:yen/src/widget_custom/card/avater_profile.dart';
 import 'package:yen/src/widget_custom/line/line.dart';
@@ -329,10 +329,17 @@ class _PostPageState extends State<PostPage> {
           ),
           Expanded(
             child: Container(
-              child: Icon(
-                Icons.close,
-                size: 30,
-                color: Color(0xff009EF8),
+              child: InkWell(
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => NavigationPage(),
+                  ),
+                ),
+                child: Icon(
+                  Icons.close,
+                  size: 30,
+                  color: Color(0xff009EF8),
+                ),
               ),
             ),
           ),

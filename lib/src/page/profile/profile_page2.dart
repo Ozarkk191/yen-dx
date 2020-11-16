@@ -8,9 +8,6 @@ import 'package:loading_overlay/loading_overlay.dart';
 import 'package:select_dialog/select_dialog.dart';
 import 'package:toast/toast.dart';
 import 'package:yen/models/user_model.dart';
-import 'package:yen/src/page/profile/profile_page.dart';
-import 'package:yen/src/page/register/register_page.dart';
-import 'package:yen/src/widget_custom/button/back_button.dart';
 import 'package:yen/src/widget_custom/button/non_corner_button.dart';
 import 'package:yen/src/widget_custom/card/avater_profile.dart';
 import 'package:yen/src/widget_custom/line/line.dart';
@@ -289,51 +286,74 @@ class _ProfilePage2State extends State<ProfilePage2> {
                     ),
                   ),
                   SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      NonCornerButton(
-                        textButton: edit ? "Save" : "Edit",
-                        textColor: Color(0xffffffff),
-                        borderRadius: 40,
-                        padding: 0,
-                        color: Color(0xff80D3F6),
-                        width: MediaQuery.of(context).size.width / 2.7,
-                        textSize: 20,
-                        onTap: () {
-                          setState(() {
-                            if (edit) {
-                              update();
-                            } else {
-                              edit = true;
-                            }
-                          });
-                        },
-                      ),
-                      SizedBox(width: 10),
-                      NonCornerButton(
-                        textButton: "Cancel",
-                        textColor: Color(0xffffffff),
-                        borderRadius: 40,
-                        padding: 0,
-                        color: Color(0xffEC2024),
-                        width: MediaQuery.of(context).size.width / 2.7,
-                        textSize: 20,
-                        onTap: () {
-                          setState(() {
-                            edit = false;
-                            _image = null;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
+                  edit ? _buildSaveBtn(context) : _buildEditBtn(context),
+                  SizedBox(height: 10),
                 ],
               ),
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildSaveBtn(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        NonCornerButton(
+          textButton: "Save",
+          textColor: Color(0xffffffff),
+          borderRadius: 40,
+          padding: 0,
+          color: Color(0xff80D3F6),
+          width: MediaQuery.of(context).size.width / 2.7,
+          textSize: 20,
+          onTap: () {
+            setState(() {
+              update();
+            });
+          },
+        ),
+        SizedBox(width: 10),
+        NonCornerButton(
+          textButton: "Cancel",
+          textColor: Color(0xffffffff),
+          borderRadius: 40,
+          padding: 0,
+          color: Color(0xffEC2024),
+          width: MediaQuery.of(context).size.width / 2.7,
+          textSize: 20,
+          onTap: () {
+            setState(() {
+              edit = false;
+              _image = null;
+            });
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildEditBtn(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        NonCornerButton(
+          textButton: "Edit Profile",
+          textColor: Color(0xffffffff),
+          borderRadius: 40,
+          padding: 0,
+          color: Color(0xff80D3F6),
+          width: MediaQuery.of(context).size.width / 2.7,
+          textSize: 20,
+          onTap: () {
+            setState(() {
+              edit = true;
+            });
+          },
+        ),
+      ],
     );
   }
 }

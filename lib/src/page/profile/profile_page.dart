@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -79,8 +78,12 @@ class _ProfilePageState extends State<ProfilePage> {
         _phone.text == "" ||
         _email.text == "" ||
         _business.text == "") {
-      Toast.show("ห้ามมีฟิวล์ว่าง", context,
-          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+      Toast.show(
+        "Please input all fields",
+        context,
+        duration: Toast.LENGTH_LONG,
+        gravity: Toast.BOTTOM,
+      );
     } else {
       update();
     }
@@ -125,7 +128,7 @@ class _ProfilePageState extends State<ProfilePage> {
         .doc(widget.user.uid)
         .set(user.toJson())
         .then((value) {
-      Toast.show("บันทึกสำเร็จ", context,
+      Toast.show("Saved", context,
           duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
       setState(() {
         _loading = false;
@@ -261,7 +264,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 labelText: 'Contact Tel',
                                 keyboardType: TextInputType.phone,
                                 controller: _phone,
-                                maxLength: 10,
+                                maxLength: 12,
                               ),
                               SizedBox(height: 10),
                               MainTextField(
