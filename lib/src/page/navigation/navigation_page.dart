@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:yen/src/page/chat/chat_page.dart';
 import 'package:yen/src/page/home/home_page.dart';
-import 'package:yen/src/page/login/login_page.dart';
 import 'package:yen/src/page/member/member_page.dart';
 import 'package:yen/src/page/post/post_page.dart';
 import 'package:yen/src/page/profile/profile_page2.dart';
@@ -17,7 +17,7 @@ class _NavigationPageState extends State<NavigationPage> {
     ProfilePage2(),
     PostPage(),
     MemberPage(),
-    LoginPage(),
+    ChatPage(),
   ];
 
   void _onItemTapped(int index) {
@@ -35,6 +35,7 @@ class _NavigationPageState extends State<NavigationPage> {
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        showUnselectedLabels: true,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),

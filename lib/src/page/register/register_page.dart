@@ -59,12 +59,16 @@ class _RegisterPageState extends State<RegisterPage> {
   void _checkField({@required String email, @required String password}) {
     FocusScope.of(context).requestFocus(FocusNode());
     if (email == "" || password == "") {
-      Toast.show("E-mail และ Password ห้ามว่าง", context,
+      Toast.show("E-mail and Password cannot be empty", context,
           duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
     }
     if (password.length < 6) {
-      Toast.show("Password ต้องไม่น้อยกว่า 6 ตัวอักษร", context,
-          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+      Toast.show(
+        "Password must be more then 6 characters",
+        context,
+        duration: Toast.LENGTH_LONG,
+        gravity: Toast.BOTTOM,
+      );
     } else {
       setState(() {
         _loading = true;
@@ -82,16 +86,30 @@ class _RegisterPageState extends State<RegisterPage> {
         _allowedEmailList.where((element) => element == email).toList();
 
     if (allowedlist.length == 0) {
-      Toast.show("อีเมลนี้ไม่ได้รับอนุญาติ", context,
-          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+      Toast.show(
+        "This email is not allowed or you are not YenDx member",
+        context,
+        duration: Toast.LENGTH_LONG,
+        gravity: Toast.BOTTOM,
+      );
+      setState(() {
+        _loading = false;
+      });
     } else {
       try {
         UserCredential userCredential = await _auth
             .createUserWithEmailAndPassword(email: email, password: password)
-            .whenComplete(() {
-          Toast.show("สมัครสมาชิกเรียบร้อย", context,
-              duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-        });
+            .whenComplete(
+          () {
+            Toast.show(
+              "Successfully registered",
+              context,
+              duration: Toast.LENGTH_LONG,
+              gravity: Toast.BOTTOM,
+            );
+          },
+        );
+
         if (userCredential.user != null) {
           setState(() {
             _loading = false;
@@ -108,8 +126,20 @@ class _RegisterPageState extends State<RegisterPage> {
       } on FirebaseAuthException catch (e) {
         if (e.code == 'weak-password') {
           print('The password provided is too weak.');
+          Toast.show(
+            "The password provided is too weak.",
+            context,
+            duration: Toast.LENGTH_LONG,
+            gravity: Toast.BOTTOM,
+          );
         } else if (e.code == 'email-already-in-use') {
           print('The account already exists for that email.');
+          Toast.show(
+            "The account already exists for that email.",
+            context,
+            duration: Toast.LENGTH_LONG,
+            gravity: Toast.BOTTOM,
+          );
         }
       } catch (e) {
         print(e);

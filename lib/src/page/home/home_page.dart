@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:yen/models/post_model.dart';
 import 'package:yen/models/user_model.dart';
+import 'package:yen/src/page/post/post_page.dart';
 import 'package:yen/src/widget_custom/item_list/post_list_item.dart';
 import 'package:yen/src/widget_custom/line/line.dart';
 import 'package:yen/src/widget_custom/textfield/search_textfield.dart';
@@ -87,19 +88,26 @@ class _HomePageState extends State<HomePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   _textToggle(
-                      callback: () {
-                        setState(() {
-                          _position = 1;
-                        });
-                      },
-                      text: 'NEWS'),
+                    callback: () {
+                      setState(() {
+                        _position = 1;
+                      });
+                    },
+                    text: 'NEWS',
+                  ),
                   _textToggle(
-                      callback: () {
-                        setState(() {
-                          _position = 2;
-                        });
-                      },
-                      text: 'POST'),
+                    callback: () {
+                      // setState(() {
+                      //   _position = 2;
+                      // });
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => PostPage(),
+                        ),
+                      );
+                    },
+                    text: 'POST',
+                  ),
                 ],
               ),
               _lineToggle(context),
