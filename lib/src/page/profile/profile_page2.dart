@@ -5,6 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:select_dialog/select_dialog.dart';
 import 'package:toast/toast.dart';
 import 'package:yen/models/user_model.dart';
 import 'package:yen/src/page/profile/profile_page.dart';
@@ -14,6 +15,7 @@ import 'package:yen/src/widget_custom/button/non_corner_button.dart';
 import 'package:yen/src/widget_custom/card/avater_profile.dart';
 import 'package:yen/src/widget_custom/line/line.dart';
 import 'package:yen/src/widget_custom/textfield/main_textfield.dart';
+import 'package:yen/statics/list_satatic.dart';
 import 'package:yen/statics/model_satatic.dart';
 
 class ProfilePage2 extends StatefulWidget {
@@ -119,6 +121,20 @@ class _ProfilePage2State extends State<ProfilePage2> {
     super.dispose();
   }
 
+  void _selectCountry() {
+    SelectDialog.showModal<String>(
+      context,
+      label: "Country",
+      selectedValue: _country.text,
+      items: ListStatic.countryList,
+      onChange: (String selected) {
+        setState(() {
+          _country.text = selected;
+        });
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -161,28 +177,44 @@ class _ProfilePage2State extends State<ProfilePage2> {
                                         getImage();
                                       }
                                     : null,
-                                child: _image == null
-                                    ? Container(
-                                        width: 100,
-                                        height: 100,
-                                        child: AvaterProfile(
-                                          pathAvater:
-                                              ModelStatic.user.avatarUrl,
-                                        ),
-                                      )
-                                    : Card(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(100),
-                                        ),
-                                        clipBehavior: Clip.hardEdge,
-                                        child: Image.file(
-                                          _image,
-                                          width: 100,
-                                          height: 100,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
+                                child: Container(
+                                  width: 100,
+                                  height: 100,
+                                  child: Stack(
+                                    children: [
+                                      _image == null
+                                          ? Container(
+                                              width: 100,
+                                              height: 100,
+                                              child: AvaterProfile(
+                                                pathAvater:
+                                                    ModelStatic.user.avatarUrl,
+                                              ),
+                                            )
+                                          : Card(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(100),
+                                              ),
+                                              clipBehavior: Clip.hardEdge,
+                                              child: Image.file(
+                                                _image,
+                                                width: 100,
+                                                height: 100,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                      edit
+                                          ? Align(
+                                              alignment: Alignment.topRight,
+                                              child: Icon(
+                                                Icons.add_a_photo,
+                                              ),
+                                            )
+                                          : Container(),
+                                    ],
+                                  ),
+                                ),
                               ),
                               SizedBox(height: 10),
                               Text(
@@ -207,10 +239,24 @@ class _ProfilePage2State extends State<ProfilePage2> {
                                 labelText: 'Last name',
                               ),
                               SizedBox(height: 10),
-                              MainTextField(
-                                controller: _country,
-                                enabled: edit,
-                                labelText: 'Country',
+                              InkWell(
+                                onTap: !edit
+                                    ? null
+                                    : () {
+                                        _selectCountry();
+                                      },
+                                child: MainTextField(
+                                  controller: _country,
+                                  enabled: false,
+                                  disabledBorder: !edit
+                                      ? null
+                                      : OutlineInputBorder(
+                                          borderSide: new BorderSide(
+                                            color: Color(0xff6E8EC6),
+                                          ),
+                                        ),
+                                  labelText: 'Country',
+                                ),
                               ),
                               SizedBox(height: 10),
                               MainTextField(

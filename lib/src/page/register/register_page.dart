@@ -57,6 +57,8 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   void _checkField({@required String email, @required String password}) {
+    email.toLowerCase();
+    password.toLowerCase();
     FocusScope.of(context).requestFocus(FocusNode());
     if (email == "" || password == "") {
       Toast.show("E-mail และ Password ห้ามว่าง", context,

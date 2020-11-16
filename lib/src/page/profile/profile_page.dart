@@ -7,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:select_dialog/select_dialog.dart';
 import 'package:toast/toast.dart';
 import 'package:yen/models/user_model.dart';
 import 'package:yen/src/page/navigation/navigation_page.dart';
@@ -15,6 +16,7 @@ import 'package:yen/src/widget_custom/button/back_button.dart';
 import 'package:yen/src/widget_custom/button/non_corner_button.dart';
 import 'package:yen/src/widget_custom/line/line.dart';
 import 'package:yen/src/widget_custom/textfield/main_textfield.dart';
+import 'package:yen/statics/list_satatic.dart';
 import 'package:yen/statics/string_static.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -133,6 +135,20 @@ class _ProfilePageState extends State<ProfilePage> {
     });
   }
 
+  void _selectCountry() {
+    SelectDialog.showModal<String>(
+      context,
+      label: "Country",
+      selectedValue: _country.text,
+      items: ListStatic.countryList,
+      onChange: (String selected) {
+        setState(() {
+          _country.text = selected;
+        });
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -225,9 +241,15 @@ class _ProfilePageState extends State<ProfilePage> {
                                 controller: _lastname,
                               ),
                               SizedBox(height: 10),
-                              MainTextField(
-                                labelText: 'Country',
-                                controller: _country,
+                              InkWell(
+                                onTap: () {
+                                  _selectCountry();
+                                },
+                                child: MainTextField(
+                                  controller: _country,
+                                  enabled: false,
+                                  labelText: 'Country',
+                                ),
                               ),
                               SizedBox(height: 10),
                               MainTextField(

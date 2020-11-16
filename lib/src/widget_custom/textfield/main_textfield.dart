@@ -7,6 +7,8 @@ class MainTextField extends StatelessWidget {
   final bool enabled;
   final int maxLength;
   final TextInputType keyboardType;
+  final OutlineInputBorder disabledBorder;
+  final Function onTap;
 
   const MainTextField({
     Key key,
@@ -16,6 +18,8 @@ class MainTextField extends StatelessWidget {
     this.enabled = true,
     this.maxLength,
     this.keyboardType = TextInputType.text,
+    this.disabledBorder,
+    this.onTap,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -24,6 +28,7 @@ class MainTextField extends StatelessWidget {
       height: 40,
       child: Center(
         child: TextField(
+          textCapitalization: TextCapitalization.words,
           enabled: enabled,
           maxLength: maxLength,
           obscureText: obscureText,
@@ -32,6 +37,7 @@ class MainTextField extends StatelessWidget {
           buildCounter: (BuildContext context,
                   {int currentLength, int maxLength, bool isFocused}) =>
               null,
+          onTap: onTap,
           decoration: InputDecoration(
             border: OutlineInputBorder(
               borderSide: new BorderSide(
@@ -43,6 +49,7 @@ class MainTextField extends StatelessWidget {
                 color: Color(0xff6E8EC6),
               ),
             ),
+            disabledBorder: disabledBorder,
             labelText: '$labelText',
             labelStyle: TextStyle(fontStyle: FontStyle.italic),
           ),

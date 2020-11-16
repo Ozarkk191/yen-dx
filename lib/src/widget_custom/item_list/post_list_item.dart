@@ -94,18 +94,20 @@ class PostListItem extends StatelessWidget {
                       ],
                     ),
                   ),
-                  SizedBox(height: 5),
+                  SizedBox(height: 0),
                   Container(
                     width: width,
                     child: Text('$text'),
                   ),
                   SizedBox(height: 10),
                   Container(
-                    child: Image.network(
-                      "$pathImage",
-                      fit: BoxFit.contain,
-                      width: pathImage != null ? width : 0,
-                    ),
+                    child: pathImage != null
+                        ? Image.network(
+                            "$pathImage",
+                            fit: BoxFit.contain,
+                            width: width,
+                          )
+                        : Container(),
                   ),
                   Container(
                     height: 40,

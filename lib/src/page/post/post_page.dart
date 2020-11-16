@@ -5,6 +5,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:loading_overlay/loading_overlay.dart';
+import 'package:toast/toast.dart';
 import 'package:yen/models/post_model.dart';
 import 'package:yen/src/widget_custom/button/non_corner_button.dart';
 import 'package:yen/src/widget_custom/card/avater_profile.dart';
@@ -23,6 +25,7 @@ class _PostPageState extends State<PostPage> {
   TextEditingController _content = TextEditingController();
   String _date = "";
   File _file;
+  bool _loading = false;
   final picker = ImagePicker();
 
   Future getImage() async {
@@ -111,6 +114,9 @@ class _PostPageState extends State<PostPage> {
   }
 
   void _post() async {
+    setState(() {
+      _loading = true;
+    });
     FirebaseFirestore _database = FirebaseFirestore.instance;
     var date = DateTime.now().millisecondsSinceEpoch;
     String avatarUrl = "";
@@ -140,11 +146,18 @@ class _PostPageState extends State<PostPage> {
     );
 
     await _database
-        .collection("posts")
+        .collection("Posts")
         .doc(ModelStatic.user.uid)
         .collection("detail")
         .doc("$date")
-        .set(post.toJson());
+        .set(post.toJson())
+        .then((value) {
+      setState(() {
+        _loading = false;
+        Toast.show("โพสต์เรียบร้อยแล้ว", context,
+            duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+      });
+    });
   }
 
   @override
@@ -152,135 +165,138 @@ class _PostPageState extends State<PostPage> {
     return Scaffold(
       backgroundColor: Color(0xffE2F2F6),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              _headerPost(),
-              SizedBox(height: 50),
-              PostTextField(
-                hint: 'Topic..',
-                maxLength: 10,
-                maxLines: 1,
-                controller: _topic,
-              ),
-              SizedBox(height: 5),
-              Container(
-                padding: EdgeInsets.all(2),
-                decoration: BoxDecoration(
-                  color: Color(0xff007EC4),
-                  borderRadius: new BorderRadius.all(Radius.circular(5)),
+        child: LoadingOverlay(
+          isLoading: _loading,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                _headerPost(),
+                SizedBox(height: 50),
+                PostTextField(
+                  hint: 'Topic..',
+                  maxLength: 120,
+                  maxLines: 1,
+                  controller: _topic,
                 ),
-                child: Container(
-                  width: MediaQuery.of(context).size.width * 0.8,
-                  padding: EdgeInsets.only(bottom: 10),
+                SizedBox(height: 5),
+                Container(
+                  padding: EdgeInsets.all(2),
                   decoration: BoxDecoration(
-                    color: Color(0xffffffff),
+                    color: Color(0xff007EC4),
                     borderRadius: new BorderRadius.all(Radius.circular(5)),
                   ),
-                  child: Column(
-                    children: [
-                      TextField(
-                        maxLength: 1000,
-                        maxLines: null,
-                        controller: _content,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          errorBorder: InputBorder.none,
-                          disabledBorder: InputBorder.none,
-                          contentPadding: EdgeInsets.only(
-                              left: 15, bottom: 11, top: 11, right: 15),
-                          hintText: 'content..',
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    padding: EdgeInsets.only(bottom: 10),
+                    decoration: BoxDecoration(
+                      color: Color(0xffffffff),
+                      borderRadius: new BorderRadius.all(Radius.circular(5)),
+                    ),
+                    child: Column(
+                      children: [
+                        TextField(
+                          maxLength: 1000,
+                          maxLines: null,
+                          controller: _content,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            errorBorder: InputBorder.none,
+                            disabledBorder: InputBorder.none,
+                            contentPadding: EdgeInsets.only(
+                                left: 15, bottom: 11, top: 11, right: 15),
+                            hintText: 'content..',
+                          ),
                         ),
-                      ),
-                      _file != null
-                          ? Container(
-                              width: MediaQuery.of(context).size.width * 0.7,
-                              margin: EdgeInsets.only(top: 10),
-                              child: Stack(
-                                children: [
-                                  Align(
-                                    alignment: Alignment.topCenter,
-                                    child: Image.file(
-                                      _file,
-                                      width: 250,
-                                      height: 250,
-                                      fit: BoxFit.cover,
+                        _file != null
+                            ? Container(
+                                width: MediaQuery.of(context).size.width * 0.7,
+                                margin: EdgeInsets.only(top: 10),
+                                child: Stack(
+                                  children: [
+                                    Align(
+                                      alignment: Alignment.topCenter,
+                                      child: Image.file(
+                                        _file,
+                                        width: 250,
+                                        height: 250,
+                                        fit: BoxFit.cover,
+                                      ),
                                     ),
-                                  ),
-                                  Align(
-                                    alignment: Alignment.topRight,
-                                    child: InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          _file = null;
-                                        });
-                                      },
-                                      child: Icon(Icons.close),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            )
-                          : Container(),
-                    ],
+                                    Align(
+                                      alignment: Alignment.topRight,
+                                      child: InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            _file = null;
+                                          });
+                                        },
+                                        child: Icon(Icons.close),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              )
+                            : Container(),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              // PostTextField(
-              //   hint: 'content..',
-              //   maxLength: 10000,
-              //   maxLines: 10,
-              //   controller: _content,
-              // ),
-              SizedBox(height: 20),
-              Container(
-                width: MediaQuery.of(context).size.width * 0.8,
-                height: 50,
-                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                decoration: new BoxDecoration(
-                  color: Color(0xffffffff),
-                  borderRadius: new BorderRadius.all(Radius.circular(10)),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      child: Row(
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              getImage();
-                            },
-                            child: Icon(
-                              Icons.image,
+                // PostTextField(
+                //   hint: 'content..',
+                //   maxLength: 10000,
+                //   maxLines: 10,
+                //   controller: _content,
+                // ),
+                SizedBox(height: 20),
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  height: 50,
+                  padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  decoration: new BoxDecoration(
+                    color: Color(0xffffffff),
+                    borderRadius: new BorderRadius.all(Radius.circular(10)),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        child: Row(
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                getImage();
+                              },
+                              child: Icon(
+                                Icons.image,
+                                size: 30,
+                                color: Color(0xff009EF8),
+                              ),
+                            ),
+                            Icon(
+                              Icons.sentiment_satisfied,
                               size: 30,
                               color: Color(0xff009EF8),
                             ),
-                          ),
-                          Icon(
-                            Icons.sentiment_satisfied,
-                            size: 30,
-                            color: Color(0xff009EF8),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    NonCornerButton(
-                      textButton: 'POST',
-                      onTap: () {
-                        _post();
-                      },
-                      borderRadius: 5,
-                      padding: 0,
-                      color: Color(0xff009EF8),
-                      width: 70,
-                    )
-                  ],
+                      NonCornerButton(
+                        textButton: 'POST',
+                        onTap: () {
+                          _post();
+                        },
+                        borderRadius: 5,
+                        padding: 0,
+                        color: Color(0xff009EF8),
+                        width: 70,
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
