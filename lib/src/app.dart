@@ -10,7 +10,7 @@ class MyApp extends StatelessWidget {
     ));
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'YenDx',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         primaryColor: Color(0xff007EC4),
