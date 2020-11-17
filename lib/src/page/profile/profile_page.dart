@@ -122,6 +122,9 @@ class _ProfilePageState extends State<ProfilePage> {
       displayname: "${_firstname.text} ${_lastname.text}",
       uid: widget.user.uid,
       notitoken: "token",
+      address: "",
+      position: "",
+      website: "",
     );
     await _database
         .collection("Users")

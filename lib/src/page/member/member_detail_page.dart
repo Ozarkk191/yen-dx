@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:yen/models/user_model.dart';
 import 'package:yen/src/widget_custom/button/back_button.dart';
 import 'package:yen/src/widget_custom/card/avater_profile.dart';
 import 'package:yen/src/widget_custom/icon/icon_and_text.dart';
 
 class MemberDetailPage extends StatelessWidget {
+  final UserModel user;
+
+  const MemberDetailPage({Key key, this.user}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -42,8 +46,7 @@ class MemberDetailPage extends StatelessWidget {
                     Container(
                       margin: EdgeInsets.fromLTRB(40, 0, 0, 0),
                       child: AvaterProfile(
-                        pathAvater:
-                            'https://upload.wikimedia.org/wikipedia/en/thumb/b/b0/Avatar-Teaser-Poster.jpg/220px-Avatar-Teaser-Poster.jpg',
+                        pathAvater: user.avatarUrl,
                         size: 120,
                       ),
                     ),
@@ -51,14 +54,14 @@ class MemberDetailPage extends StatelessWidget {
                     Container(
                       margin: EdgeInsets.fromLTRB(40, 0, 0, 0),
                       child: Text(
-                        'Noah',
+                        user.firstname,
                         style: TextStyle(fontSize: 30),
                       ),
                     ),
                     Container(
                       margin: EdgeInsets.fromLTRB(40, 0, 0, 0),
                       child: Text(
-                        'Loren',
+                        user.lastname,
                         style: TextStyle(fontSize: 30),
                       ),
                     ),
@@ -85,7 +88,7 @@ class MemberDetailPage extends StatelessWidget {
                             child: IconAndText(
                               mainAxisAlignment: MainAxisAlignment.start,
                               icon: Icons.phone,
-                              title: '+ 00 - 0000 - 0000 - 000',
+                              title: user.phone,
                               color: Colors.black,
                             ),
                           ),
@@ -94,7 +97,7 @@ class MemberDetailPage extends StatelessWidget {
                             child: IconAndText(
                               mainAxisAlignment: MainAxisAlignment.start,
                               icon: Icons.mail,
-                              title: 'INFO@COMPANYNANE.COM',
+                              title: user.email,
                               color: Colors.black,
                             ),
                           ),

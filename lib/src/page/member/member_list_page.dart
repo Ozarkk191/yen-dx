@@ -1,16 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:yen/models/user_model.dart';
 import 'package:yen/src/widget_custom/button/back_button2.dart';
 import 'package:yen/src/widget_custom/item_list/member_list_item.dart';
 import 'package:yen/src/widget_custom/textfield/search_textfield.dart';
+import 'package:yen/statics/list_satatic.dart';
+import 'package:yen/statics/model_satatic.dart';
 
 import 'member_detail_page.dart';
 
 class MemberListPage extends StatefulWidget {
+  final List<UserModel> userList;
+  final int country;
+
+  const MemberListPage({Key key, this.userList, this.country})
+      : super(key: key);
   @override
   _MemberListPageState createState() => _MemberListPageState();
 }
 
 class _MemberListPageState extends State<MemberListPage> {
+  List<UserModel> _userList = List<UserModel>();
+  @override
+  void initState() {
+    _fillter(widget.country);
+    super.initState();
+  }
+
+  void _fillter(int index) {
+    for (var i = 0; i < widget.userList.length; i++) {
+      if (widget.userList[i].uid != ModelStatic.user.uid) {
+        if (widget.userList[i].country == ListStatic.countryList[index]) {
+          _userList.add(widget.userList[i]);
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -21,23 +46,26 @@ class _MemberListPageState extends State<MemberListPage> {
             _header(context),
             Expanded(
               child: ListView.builder(
-                itemCount: 8,
+                itemCount: _userList.length,
                 itemBuilder: (context, index) {
                   return MemberListItem(
                     address1: '1234 YOUR LOCATION HERE',
                     address2: 'YOUR RD. YOUR STREET POSTAL 00000',
-                    email: "INFO@COMPANYNANE.COM",
-                    imageUrl:
-                        'https://upload.wikimedia.org/wikipedia/en/thumb/b/b0/Avatar-Teaser-Poster.jpg/220px-Avatar-Teaser-Poster.jpg',
-                    name: 'Aaren',
-                    phone: "+ 00 - 0000 - 0000 - 000",
+                    email: _userList[index].email,
+                    imageUrl: _userList[index].avatarUrl,
+                    name: _userList[index].displayname,
+                    phone: _userList[index].phone,
                     position: 'position',
                     website: "WWW.COMPANYNANE.COM",
                     callback: () {
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => MemberDetailPage()));
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MemberDetailPage(
+                            user: _userList[index],
+                          ),
+                        ),
+                      );
                     },
                   );
                 },

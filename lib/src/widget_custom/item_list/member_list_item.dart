@@ -54,7 +54,7 @@ class MemberListItem extends StatelessWidget {
               children: [
                 Text(
                   name,
-                  style: TextStyle(fontSize: 24),
+                  style: TextStyle(fontSize: 18),
                 ),
                 Text(
                   position,

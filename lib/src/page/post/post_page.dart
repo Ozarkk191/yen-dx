@@ -143,6 +143,7 @@ class _PostPageState extends State<PostPage> {
       comment: _commentList,
       totalLike: 0,
       imageUrl: avatarUrl,
+      id: date.toString(),
     );
 
     await _database
