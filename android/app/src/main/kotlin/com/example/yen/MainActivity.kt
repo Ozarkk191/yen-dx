@@ -1,4 +1,4 @@
-package com.yen_dx
+package com.fare.yendx
 
 import io.flutter.embedding.android.FlutterActivity
 
