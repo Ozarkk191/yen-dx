@@ -154,8 +154,17 @@ class _PostPageState extends State<PostPage> {
         .then((value) {
       setState(() {
         _loading = false;
-        Toast.show("โพสต์เรียบร้อยแล้ว", context,
-            duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+        Toast.show(
+          "Saved",
+          context,
+          duration: Toast.LENGTH_LONG,
+          gravity: Toast.BOTTOM,
+        );
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => NavigationPage(),
+          ),
+        );
       });
     });
   }
