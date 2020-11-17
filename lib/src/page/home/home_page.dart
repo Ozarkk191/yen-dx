@@ -23,6 +23,7 @@ class _HomePageState extends State<HomePage> {
   FirebaseFirestore _database = FirebaseFirestore.instance;
   int _position = 1;
   List<String> menuList = ["commented on your post", "likes a your post"];
+  // List<String> _idPost = List<String>();
 
   @override
   void initState() {
@@ -32,9 +33,16 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
   void _getPostID() async {
+    ListStatic.postList.clear();
     for (var i = 0; i < ListStatic.uidList.length; i++) {
-      log(ListStatic.uidList[i]);
       await _database
           .collection("Posts")
           .doc(ListStatic.uidList[i])
@@ -42,25 +50,30 @@ class _HomePageState extends State<HomePage> {
           .get()
           .then((QuerySnapshot snapshot) {
         snapshot.docs.forEach((value) {
-          log(value.id.toString());
-          _getPost(ListStatic.uidList[i], value.id);
+          _getPost("${ListStatic.uidList[i]}_${value.id.toString()}");
         });
       });
     }
   }
 
-  void _getPost(String uid, String id) async {
-    ListStatic.postList.clear();
+  void _getPost(String id) async {
+    var text = id.split("_");
     await _database
         .collection("Posts")
-        .doc(uid)
+        .doc(text[0])
         .collection("detail")
-        .doc(id)
+        .doc(text[1])
         .get()
         .then((value) {
       PostModel post = PostModel.fromJson(value.data());
+
+      post.id = DateTime.fromMillisecondsSinceEpoch(int.parse(post.id) * 1000)
+          .toString();
       ListStatic.postList.add(post);
-      setState(() {});
+      ListStatic.postList.sort((a, b) => b.id.compareTo(a.id));
+      if (this.mounted) {
+        setState(() {});
+      }
     });
   }
 

@@ -79,7 +79,7 @@ class _SplashPageState extends State<SplashPage> {
     FirebaseFirestore _database = FirebaseFirestore.instance;
     await _database.collection("Users").get().then((QuerySnapshot snapshot) {
       snapshot.docs.forEach((value) {
-        log("--------------------------------${value.id}");
+        // log("--------------------------------${value.id}");
         ListStatic.uidList.add(value.id);
       });
     });

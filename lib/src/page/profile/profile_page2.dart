@@ -79,6 +79,9 @@ class _ProfilePage2State extends State<ProfilePage2> {
       displayname: "${_firstname.text} ${_lastname.text}",
       uid: ModelStatic.user.uid,
       notitoken: "token",
+      address: "",
+      position: "",
+      website: "",
     );
     await _database
         .collection("Users")

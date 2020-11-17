@@ -1,6 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:yen/models/user_model.dart';
 import 'package:yen/src/widget_custom/card/avater_profile.dart';
 import 'package:yen/src/widget_custom/icon/icon_and_text.dart';
+import 'package:yen/statics/list_satatic.dart';
+import 'package:yen/statics/model_satatic.dart';
 
 import 'member_list_page.dart';
 
@@ -10,6 +14,8 @@ class MemberPage extends StatefulWidget {
 }
 
 class _MemberPageState extends State<MemberPage> {
+  FirebaseFirestore _database = FirebaseFirestore.instance;
+  List<UserModel> _userList = List<UserModel>();
   final arrCountry = [
     "assets/images/thai.png",
     "assets/images/cambodia.png",
@@ -19,6 +25,37 @@ class _MemberPageState extends State<MemberPage> {
     "assets/images/vietnam.png",
     "assets/images/indonesia.png",
   ];
+
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
+  @override
+  void initState() {
+    _getAllUser();
+    super.initState();
+  }
+
+  void _getAllUser() async {
+    for (var i = 0; i < ListStatic.uidList.length; i++) {
+      _database = FirebaseFirestore.instance;
+      await _database
+          .collection("Users")
+          .doc(ListStatic.uidList[i])
+          .get()
+          .then((value) {
+        UserModel user = UserModel.fromJson(value.data());
+        _userList.add(user);
+        if (this.mounted) {
+          setState(() {});
+        }
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -38,9 +75,14 @@ class _MemberPageState extends State<MemberPage> {
                   return InkWell(
                     onTap: () {
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => MemberListPage()));
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MemberListPage(
+                            userList: _userList,
+                            country: index,
+                          ),
+                        ),
+                      );
                     },
                     child: Container(
                       child: Image.asset(arrCountry[index]),
@@ -87,34 +129,35 @@ class _MemberPageState extends State<MemberPage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   AvaterProfile(
-                    pathAvater:
-                        "https://upload.wikimedia.org/wikipedia/en/thumb/b/b0/Avatar-Teaser-Poster.jpg/220px-Avatar-Teaser-Poster.jpg",
+                    pathAvater: ModelStatic.user.avatarUrl,
                     size: 100,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.3,
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          'ANNA',
-                          style: TextStyle(color: Colors.white, fontSize: 24),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    margin: EdgeInsets.only(left: 40),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          alignment: Alignment.centerRight,
+                          child: Text(
+                            ModelStatic.user.displayname,
+                            style: TextStyle(color: Colors.white, fontSize: 24),
+                          ),
                         ),
-                      ),
-                      Container(
-                        width: 50,
-                        height: 50,
-                        child: Icon(
-                          Icons.edit,
-                          color: Colors.white,
+                        Container(
+                          width: 50,
+                          height: 50,
+                          child: Icon(
+                            Icons.edit,
+                            color: Colors.white,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                  IconAndText(
-                      icon: Icons.phone, title: "+ 00 - 0000 - 0000 - 000"),
-                  IconAndText(icon: Icons.mail, title: "INFO@COMPANYNANE.COM"),
+                  IconAndText(icon: Icons.phone, title: ModelStatic.user.phone),
+                  IconAndText(icon: Icons.mail, title: ModelStatic.user.email),
                   IconAndText(
                       icon: Icons.language, title: "WWW.COMPANYNANE.COM"),
                   SizedBox(height: 5),
@@ -133,7 +176,7 @@ class _MemberPageState extends State<MemberPage> {
               width: MediaQuery.of(context).size.width,
               margin: EdgeInsets.only(left: 40),
               child: Text(
-                'Country',
+                ModelStatic.user.country,
                 style: TextStyle(
                   color: Color(0xff007EC4),
                   fontSize: 30,

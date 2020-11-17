@@ -12,6 +12,9 @@ class UserModel {
   String displayname;
   String uid;
   String notitoken;
+  String address;
+  String position;
+  String website;
 
   UserModel({
     @required this.avatarUrl,
@@ -25,6 +28,9 @@ class UserModel {
     @required this.displayname,
     @required this.uid,
     @required this.notitoken,
+    @required this.address,
+    @required this.position,
+    @required this.website,
   });
 
   UserModel.fromJson(Map<String, dynamic> json)
@@ -38,7 +44,10 @@ class UserModel {
         business = json['business'],
         displayname = json['displayname'],
         uid = json['uid'],
-        notitoken = json['notitoken'];
+        notitoken = json['notitoken'],
+        address = json['address'],
+        position = json['position'],
+        website = json['website'];
 
   toJson() {
     return {
@@ -53,6 +62,9 @@ class UserModel {
       "displayname": displayname,
       "uid": uid,
       "notitoken": notitoken,
+      "address": address,
+      "position": position,
+      "website": website,
     };
   }
 }
