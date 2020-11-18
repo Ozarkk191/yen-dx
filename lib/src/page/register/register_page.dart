@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +25,7 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController _email = TextEditingController();
   TextEditingController _password = TextEditingController();
   List<String> _allowedEmailList = List<String>();
+  List<String> _idList = List<String>();
   bool _loading = false;
 
   @override
@@ -44,17 +47,18 @@ class _RegisterPageState extends State<RegisterPage> {
         .get()
         .then((QuerySnapshot snapshot) {
       snapshot.docs.forEach((value) {
-        _getMail(value.id);
+        String email = value.data()['email'];
+        _allowedEmailList.add(email);
       });
-    });
+    }).then((value) {});
   }
 
-  void _getMail(String id) async {
-    await database.collection("allowed_emails").doc(id).get().then((value) {
-      String email = value.get('email');
-      _allowedEmailList.add(email);
-    });
-  }
+  // void _getMail(String id) async {
+  //   await database.collection("allowed_emails").doc(id).get().then((value) {
+  //     log(email);
+  //     _allowedEmailList.add(email);
+  //   });
+  // }
 
   void _checkField({@required String email, @required String password}) {
     email.toLowerCase();

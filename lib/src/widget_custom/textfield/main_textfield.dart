@@ -51,7 +51,8 @@ class MainTextField extends StatelessWidget {
             ),
             disabledBorder: disabledBorder,
             labelText: '$labelText',
-            labelStyle: TextStyle(fontStyle: FontStyle.italic),
+            labelStyle:
+                TextStyle(fontStyle: FontStyle.italic, color: Colors.black),
           ),
         ),
       ),

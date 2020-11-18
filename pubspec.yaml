@@ -25,12 +25,13 @@ dependencies:
     sdk: flutter
   firebase_core: ^0.5.0
   firebase_auth: ^0.18.3
-  cloud_firestore: ^0.14.3
+  cloud_firestore: ^0.14.2
   toast: ^0.1.5
   image_picker: ^0.6.7+14
   firebase_storage: ^4.0.1
   loading_overlay: ^0.2.1
   select_dialog: ^1.2.1
+  dash_chat: ^1.1.15
   
 
 

@@ -1,13 +1,23 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:yen/models/user_model.dart';
+import 'package:yen/src/page/chat/chat_room/chat_room_page.dart';
 import 'package:yen/src/widget_custom/button/back_button.dart';
 import 'package:yen/src/widget_custom/card/avater_profile.dart';
 import 'package:yen/src/widget_custom/icon/icon_and_text.dart';
+import 'package:yen/statics/model_satatic.dart';
 
-class MemberDetailPage extends StatelessWidget {
+class MemberDetailPage extends StatefulWidget {
   final UserModel user;
 
   const MemberDetailPage({Key key, this.user}) : super(key: key);
+
+  @override
+  _MemberDetailPageState createState() => _MemberDetailPageState();
+}
+
+class _MemberDetailPageState extends State<MemberDetailPage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -46,7 +56,7 @@ class MemberDetailPage extends StatelessWidget {
                     Container(
                       margin: EdgeInsets.fromLTRB(40, 0, 0, 0),
                       child: AvaterProfile(
-                        pathAvater: user.avatarUrl,
+                        pathAvater: widget.user.avatarUrl,
                         size: 120,
                       ),
                     ),
@@ -54,14 +64,14 @@ class MemberDetailPage extends StatelessWidget {
                     Container(
                       margin: EdgeInsets.fromLTRB(40, 0, 0, 0),
                       child: Text(
-                        user.firstname,
+                        widget.user.firstname,
                         style: TextStyle(fontSize: 30),
                       ),
                     ),
                     Container(
                       margin: EdgeInsets.fromLTRB(40, 0, 0, 0),
                       child: Text(
-                        user.lastname,
+                        widget.user.lastname,
                         style: TextStyle(fontSize: 30),
                       ),
                     ),
@@ -88,7 +98,7 @@ class MemberDetailPage extends StatelessWidget {
                             child: IconAndText(
                               mainAxisAlignment: MainAxisAlignment.start,
                               icon: Icons.phone,
-                              title: user.phone,
+                              title: widget.user.phone,
                               color: Colors.black,
                             ),
                           ),
@@ -97,7 +107,7 @@ class MemberDetailPage extends StatelessWidget {
                             child: IconAndText(
                               mainAxisAlignment: MainAxisAlignment.start,
                               icon: Icons.mail,
-                              title: user.email,
+                              title: widget.user.email,
                               color: Colors.black,
                             ),
                           ),
@@ -143,7 +153,23 @@ class MemberDetailPage extends StatelessWidget {
                       height: 50,
                       alignment: Alignment.center,
                       child: InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          var keyRoom = [
+                            ModelStatic.user.uid,
+                            widget.user.uid,
+                          ];
+                          keyRoom.sort((a, b) => a.compareTo(b));
+                          String key = "${keyRoom[0]}_${keyRoom[1]}";
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (contaxt) => ChatRoomPage(
+                                keyRoom: key,
+                                user: widget.user,
+                              ),
+                            ),
+                          );
+                        },
                         child: Container(
                           width: 100,
                           height: 40,

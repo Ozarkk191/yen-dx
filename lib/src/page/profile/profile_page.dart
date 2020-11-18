@@ -254,6 +254,11 @@ class _ProfilePageState extends State<ProfilePage> {
                                 child: MainTextField(
                                   controller: _country,
                                   enabled: false,
+                                  disabledBorder: OutlineInputBorder(
+                                    borderSide: new BorderSide(
+                                      color: Color(0xff6E8EC6),
+                                    ),
+                                  ),
                                   labelText: 'Country',
                                 ),
                               ),
