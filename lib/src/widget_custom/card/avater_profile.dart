@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class AvaterProfile extends StatelessWidget {
@@ -34,9 +35,9 @@ class AvaterProfile extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(100),
         ),
-        child: Image.network(
-          "$pathAvater",
+        child: CachedNetworkImage(
           fit: BoxFit.cover,
+          imageUrl: pathAvater,
         ),
       ),
     );

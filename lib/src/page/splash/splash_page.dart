@@ -38,6 +38,17 @@ class _SplashPageState extends State<SplashPage> {
     });
   }
 
+  void _getUserAll() async {
+    FirebaseFirestore _database = FirebaseFirestore.instance;
+
+    await _database.collection("Users").get().then((QuerySnapshot snapshot) {
+      snapshot.docs.forEach((value) {
+        UserModel user = UserModel.fromJson(value.data());
+        ListStatic.userAllList.add(user);
+      });
+    });
+  }
+
   void _checkUser() async {
     FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
@@ -68,8 +79,10 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   void initState() {
+    _getUserAll();
     _checkUser();
     _getPostUID();
+
     super.initState();
   }
 

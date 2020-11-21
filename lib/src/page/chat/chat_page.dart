@@ -2,6 +2,8 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:yen/models/user_model.dart';
+import 'package:yen/src/page/chat/chat_room/chat_room_page.dart';
 import 'package:yen/src/widget_custom/card/avater_profile.dart';
 import 'package:yen/src/widget_custom/textfield/search_textfield.dart';
 import 'package:yen/statics/model_satatic.dart';
@@ -12,7 +14,8 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
-  // FirebaseFirestore _database = FirebaseFirestore.instance;
+  FirebaseFirestore _database = FirebaseFirestore.instance;
+  List<UserModel> _chatList = List<UserModel>();
 
   @override
   void initState() {
@@ -20,14 +23,26 @@ class _ChatPageState extends State<ChatPage> {
     super.initState();
   }
 
-  Future<String> getDataId(DocumentReference docRef) async {
-    DocumentSnapshot docSnap = await docRef.get();
-    var docId2 = docSnap.reference.id;
-    return docId2;
+  Future<List<UserModel>> getDataId() async {
+    UserModel user;
+    _chatList.clear();
+    for (var i = 0; i < ModelStatic.user.chatList.length; i++) {
+      await _database
+          .collection("Users")
+          .doc(ModelStatic.user.chatList[i])
+          .get()
+          .then((value) {
+        user = UserModel.fromJson(value.data());
+      }).then((value) {
+        _chatList.add(user);
+      });
+    }
+
+    return _chatList;
   }
 
   void _getPostUID() async {
-    FirebaseFirestore _database = FirebaseFirestore.instance;
+    // FirebaseFirestore _database = FirebaseFirestore.instance;
 
     await _database.collection("Chat").get().then((QuerySnapshot snapshot) {
       snapshot.docs.forEach((value) {
@@ -47,39 +62,73 @@ class _ChatPageState extends State<ChatPage> {
             child: Column(
               children: [
                 _headerContainer(context),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: 10,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Container(
-                        margin: EdgeInsets.fromLTRB(20, 5, 20, 5),
-                        width: MediaQuery.of(context).size.width * 0.8,
-                        height: 80,
-                        child: Card(
-                          elevation: 5,
-                          clipBehavior: Clip.antiAliasWithSaveLayer,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Row(
-                            children: [
-                              SizedBox(width: 10),
-                              AvaterProfile(
-                                pathAvater: ModelStatic.user.avatarUrl,
-                                size: 60,
-                                maginRight: 10,
+                FutureBuilder(
+                  future: getDataId(),
+                  builder:
+                      (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                    if (snapshot.hasData) {
+                      return Expanded(
+                        child: ListView.builder(
+                          itemCount: _chatList.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Container(
+                              margin: EdgeInsets.fromLTRB(20, 5, 20, 5),
+                              width: MediaQuery.of(context).size.width * 0.8,
+                              height: 80,
+                              child: InkWell(
+                                onTap: () {
+                                  List<String> list = [
+                                    ModelStatic.user.uid,
+                                    _chatList[index].uid,
+                                  ];
+                                  list.sort((a, b) => a.compareTo(b));
+                                  String key = "${list[0]}_${list[1]}";
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (contaxt) => ChatRoomPage(
+                                        keyRoom: key,
+                                        user: _chatList[index],
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: Card(
+                                  elevation: 5,
+                                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      SizedBox(width: 10),
+                                      AvaterProfile(
+                                        pathAvater: _chatList[index].avatarUrl,
+                                        size: 60,
+                                        maginRight: 10,
+                                      ),
+                                      Text(
+                                        _chatList[index].displayname,
+                                        style: TextStyle(
+                                            color: Colors.grey[800],
+                                            fontSize: 20),
+                                      )
+                                    ],
+                                  ),
+                                ),
                               ),
-                              Text(
-                                ModelStatic.user.displayname,
-                                style: TextStyle(
-                                    color: Colors.grey[800], fontSize: 20),
-                              )
-                            ],
-                          ),
+                            );
+                          },
                         ),
                       );
-                    },
-                  ),
+                    } else {
+                      return Expanded(
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
+                    }
+                  },
                 ),
               ],
             ),

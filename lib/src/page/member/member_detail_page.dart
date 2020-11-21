@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:yen/models/user_model.dart';
 import 'package:yen/src/page/chat/chat_room/chat_room_page.dart';
@@ -18,6 +19,53 @@ class MemberDetailPage extends StatefulWidget {
 }
 
 class _MemberDetailPageState extends State<MemberDetailPage> {
+  List<dynamic> _list = List<dynamic>();
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void _update(String uid) async {
+    FirebaseFirestore database = FirebaseFirestore.instance;
+    _list = ModelStatic.user.chatList;
+    var keyRoom = [
+      ModelStatic.user.uid,
+      uid,
+    ];
+    keyRoom.sort((a, b) => a.compareTo(b));
+    String key = "${keyRoom[0]}_${keyRoom[1]}";
+    var chat = _list.where((element) => element == uid).toList();
+    log(chat.length.toString());
+    if (chat.length == 0) {
+      _list.add(uid);
+      await database
+          .collection("Users")
+          .doc(ModelStatic.user.uid)
+          .update({"chatList": _list}).then((value) {
+        ModelStatic.user.chatList = _list;
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (contaxt) => ChatRoomPage(
+              keyRoom: key,
+              user: widget.user,
+            ),
+          ),
+        );
+      });
+    } else {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (contaxt) => ChatRoomPage(
+            keyRoom: key,
+            user: widget.user,
+          ),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -154,21 +202,7 @@ class _MemberDetailPageState extends State<MemberDetailPage> {
                       alignment: Alignment.center,
                       child: InkWell(
                         onTap: () {
-                          var keyRoom = [
-                            ModelStatic.user.uid,
-                            widget.user.uid,
-                          ];
-                          keyRoom.sort((a, b) => a.compareTo(b));
-                          String key = "${keyRoom[0]}_${keyRoom[1]}";
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (contaxt) => ChatRoomPage(
-                                keyRoom: key,
-                                user: widget.user,
-                              ),
-                            ),
-                          );
+                          _update(widget.user.uid);
                         },
                         child: Container(
                           width: 100,

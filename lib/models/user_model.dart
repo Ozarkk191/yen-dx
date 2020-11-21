@@ -15,6 +15,7 @@ class UserModel {
   String address;
   String position;
   String website;
+  List<dynamic> chatList;
 
   UserModel({
     @required this.avatarUrl,
@@ -31,6 +32,7 @@ class UserModel {
     @required this.address,
     @required this.position,
     @required this.website,
+    this.chatList,
   });
 
   UserModel.fromJson(Map<String, dynamic> json)
@@ -47,7 +49,8 @@ class UserModel {
         notitoken = json['notitoken'],
         address = json['address'],
         position = json['position'],
-        website = json['website'];
+        website = json['website'],
+        chatList = json['chatList'];
 
   toJson() {
     return {
@@ -65,6 +68,7 @@ class UserModel {
       "address": address,
       "position": position,
       "website": website,
+      "chatList": chatList,
     };
   }
 }
