@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -81,7 +83,25 @@ class _RegisterPageState extends State<RegisterPage> {
       if (widget.type == 1) {
         _login(email: email, password: password);
       } else {
-        _createUser(email: email, password: password);
+        var usedList = ListStatic.userAllList
+            .where((element) => element.email == email)
+            .toList();
+
+        log(usedList.length.toString());
+
+        if (usedList.length == 1) {
+          Toast.show(
+            "This email is already a member.",
+            context,
+            duration: Toast.LENGTH_LONG,
+            gravity: Toast.BOTTOM,
+          );
+          setState(() {
+            _loading = false;
+          });
+        } else {
+          _createUser(email: email, password: password);
+        }
       }
     }
   }
@@ -101,66 +121,53 @@ class _RegisterPageState extends State<RegisterPage> {
         _loading = false;
       });
     } else {
-      var usedList = ListStatic.userAllList
-          .where((element) => element.email == email)
-          .toList();
-
-      if (usedList.length == 1) {
-        Toast.show(
-          "This email is already a member.",
-          context,
-          duration: Toast.LENGTH_LONG,
-          gravity: Toast.BOTTOM,
+      try {
+        UserCredential userCredential = await _auth
+            .createUserWithEmailAndPassword(email: email, password: password)
+            .whenComplete(
+          () {
+            Toast.show(
+              "Successfully registered",
+              context,
+              duration: Toast.LENGTH_LONG,
+              gravity: Toast.BOTTOM,
+            );
+          },
         );
-      } else {
-        try {
-          UserCredential userCredential = await _auth
-              .createUserWithEmailAndPassword(email: email, password: password)
-              .whenComplete(
-            () {
-              Toast.show(
-                "Successfully registered",
-                context,
-                duration: Toast.LENGTH_LONG,
-                gravity: Toast.BOTTOM,
-              );
-            },
-          );
 
-          if (userCredential.user != null) {
-            setState(() {
-              _loading = false;
-            });
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ProfilePage(
-                  user: userCredential.user,
-                ),
+        if (userCredential.user != null) {
+          setState(() {
+            _loading = false;
+          });
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ProfilePage(
+                user: userCredential.user,
               ),
-            );
-          }
-        } on FirebaseAuthException catch (e) {
-          if (e.code == 'weak-password') {
-            print('The password provided is too weak.');
-            Toast.show(
-              "The password provided is too weak.",
-              context,
-              duration: Toast.LENGTH_LONG,
-              gravity: Toast.BOTTOM,
-            );
-          } else if (e.code == 'email-already-in-use') {
-            print('The account already exists for that email.');
-            Toast.show(
-              "The account already exists for that email.",
-              context,
-              duration: Toast.LENGTH_LONG,
-              gravity: Toast.BOTTOM,
-            );
-          }
-        } catch (e) {
-          print(e);
+            ),
+          );
         }
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'weak-password') {
+          print('The password provided is too weak.');
+          Toast.show(
+            "The password provided is too weak.",
+            context,
+            duration: Toast.LENGTH_LONG,
+            gravity: Toast.BOTTOM,
+          );
+        } else if (e.code == 'email-already-in-use') {
+          print('The account already exists for that email.');
+          Toast.show(
+            "The account already exists for that email.",
+            context,
+            duration: Toast.LENGTH_LONG,
+            gravity: Toast.BOTTOM,
+          );
+        }
+      } catch (e) {
+        print(e);
       }
     }
   }
