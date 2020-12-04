@@ -19,51 +19,89 @@ class MemberDetailPage extends StatefulWidget {
 }
 
 class _MemberDetailPageState extends State<MemberDetailPage> {
-  List<dynamic> _list = List<dynamic>();
+  // List<dynamic> _list = List<dynamic>();
   @override
   void initState() {
+    _update();
     super.initState();
   }
 
-  void _update(String uid) async {
-    FirebaseFirestore database = FirebaseFirestore.instance;
-    _list = ModelStatic.user.chatList;
+  _test(String uid) async {
     var keyRoom = [
       ModelStatic.user.uid,
       uid,
     ];
     keyRoom.sort((a, b) => a.compareTo(b));
     String key = "${keyRoom[0]}_${keyRoom[1]}";
-    var chat = _list.where((element) => element == uid).toList();
-    log(chat.length.toString());
-    if (chat.length == 0) {
-      _list.add(uid);
-      await database
-          .collection("Users")
-          .doc(ModelStatic.user.uid)
-          .update({"chatList": _list}).then((value) {
-        ModelStatic.user.chatList = _list;
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (contaxt) => ChatRoomPage(
-              keyRoom: key,
-              user: widget.user,
-            ),
-          ),
-        );
-      });
-    } else {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (contaxt) => ChatRoomPage(
-            keyRoom: key,
-            user: widget.user,
-          ),
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (contaxt) => ChatRoomPage(
+          keyRoom: key,
+          user: widget.user,
         ),
-      );
-    }
+      ),
+    );
+
+    // await database
+    //     .collection("Chat")
+    //     .doc("${ModelStatic.user.uid}+$uid")
+    //     .set({"test": "123456"});
+  }
+
+  void _update() async {
+    Stream collectionStream =
+        FirebaseFirestore.instance.collection('Chat').snapshots();
+    collectionStream.forEach((element) {
+      log(element);
+    });
+
+    FirebaseFirestore database = FirebaseFirestore.instance;
+    await database.collection("Chat").get().then((QuerySnapshot snapshot) {
+      snapshot.docs.forEach((value) {
+        log(value.id);
+      });
+    });
+
+    // _list = ModelStatic.user.chatList;
+
+    // var keyRoom = [
+    //   ModelStatic.user.uid,
+    //   uid,
+    // ];
+    // keyRoom.sort((a, b) => a.compareTo(b));
+    // String key = "${keyRoom[0]}_${keyRoom[1]}";
+    // var chat = _list.where((element) => element == uid).toList();
+    // log(chat.length.toString());
+    // if (chat.length == 0) {
+    //   _list.add(uid);
+    //   await database
+    //       .collection("Users")
+    //       .doc(ModelStatic.user.uid)
+    //       .update({"chatList": _list}).then((value) {
+    //     ModelStatic.user.chatList = _list;
+    //     Navigator.push(
+    //       context,
+    //       MaterialPageRoute(
+    //         builder: (contaxt) => ChatRoomPage(
+    //           keyRoom: key,
+    //           user: widget.user,
+    //         ),
+    //       ),
+    //     );
+    //   });
+    // } else {
+    //   Navigator.push(
+    //     context,
+    //     MaterialPageRoute(
+    //       builder: (contaxt) => ChatRoomPage(
+    //         keyRoom: key,
+    //         user: widget.user,
+    //       ),
+    //     ),
+    //   );
+    // }
   }
 
   @override
@@ -202,7 +240,8 @@ class _MemberDetailPageState extends State<MemberDetailPage> {
                       alignment: Alignment.center,
                       child: InkWell(
                         onTap: () {
-                          _update(widget.user.uid);
+                          _test(widget.user.uid);
+                          // _update(widget.user.uid);
                         },
                         child: Container(
                           width: 100,

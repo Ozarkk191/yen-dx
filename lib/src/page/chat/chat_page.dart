@@ -124,7 +124,7 @@ class _ChatPageState extends State<ChatPage> {
                     } else {
                       return Expanded(
                         child: Center(
-                          child: CircularProgressIndicator(),
+                          child: Container(),
                         ),
                       );
                     }

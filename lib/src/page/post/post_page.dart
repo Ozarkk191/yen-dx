@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:toast/toast.dart';
+import 'package:yen/models/comment_model.dart';
 import 'package:yen/models/post_model.dart';
 import 'package:yen/src/page/navigation/navigation_page.dart';
 import 'package:yen/src/widget_custom/button/non_corner_button.dart';
@@ -20,7 +21,7 @@ class PostPage extends StatefulWidget {
 }
 
 class _PostPageState extends State<PostPage> {
-  List<PostModel> _commentList = List<PostModel>();
+  List<CommentModel> _commentList = List<CommentModel>();
   TextEditingController _topic = TextEditingController();
   TextEditingController _content = TextEditingController();
   String _date = "";

@@ -10,6 +10,7 @@ class PostModel {
   int totalLike;
   String imageUrl;
   String id;
+  String uid;
 
   PostModel({
     @required this.avatarUrl,
@@ -21,6 +22,7 @@ class PostModel {
     @required this.totalLike,
     this.imageUrl,
     this.id,
+    this.uid,
   });
 
   PostModel.fromJson(Map<String, dynamic> json)
@@ -32,7 +34,8 @@ class PostModel {
         comment = json['comment'],
         totalLike = json['totalLike'],
         imageUrl = json['imageUrl'],
-        id = json['id'];
+        id = json['id'],
+        uid = json['uid'];
 
   toJson() {
     return {
@@ -45,6 +48,7 @@ class PostModel {
       "totalLike": totalLike,
       "imageUrl": imageUrl,
       "id": id,
+      "uid": uid,
     };
   }
 }

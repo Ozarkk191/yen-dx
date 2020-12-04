@@ -10,18 +10,22 @@ class PostListItem extends StatelessWidget {
   final String pathAvater;
   final String totalLike;
   final String totalComments;
+  final Function tapLike;
+  final Function tapComment;
 
-  const PostListItem(
-      {Key key,
-      @required this.width,
-      @required this.username,
-      @required this.date,
-      this.text,
-      this.pathImage,
-      @required this.pathAvater,
-      this.totalLike,
-      this.totalComments})
-      : super(key: key);
+  const PostListItem({
+    Key key,
+    @required this.width,
+    @required this.username,
+    @required this.date,
+    this.text,
+    this.pathImage,
+    @required this.pathAvater,
+    this.totalLike,
+    this.totalComments,
+    @required this.tapLike,
+    @required this.tapComment,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     List<String> menuList = ["Edit Post", "Delete"];
@@ -117,11 +121,15 @@ class PostListItem extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-                            Icon(
-                              Icons.chat,
-                              size: 15,
-                              color: Colors.grey,
+                            InkWell(
+                              onTap: tapComment,
+                              child: Icon(
+                                Icons.chat,
+                                size: 15,
+                                color: Colors.grey,
+                              ),
                             ),
+                            SizedBox(width: 5),
                             Text(
                               totalComments != null ? "$totalComments" : 0,
                               style: TextStyle(
@@ -135,11 +143,15 @@ class PostListItem extends StatelessWidget {
                         ),
                         Row(
                           children: [
-                            Icon(
-                              Icons.thumb_up,
-                              size: 15,
-                              color: Colors.grey,
+                            InkWell(
+                              onTap: tapLike,
+                              child: Icon(
+                                Icons.thumb_up,
+                                size: 15,
+                                color: Colors.grey,
+                              ),
                             ),
+                            SizedBox(width: 5),
                             Text(
                               totalLike != null ? "$totalLike" : 0,
                               style: TextStyle(

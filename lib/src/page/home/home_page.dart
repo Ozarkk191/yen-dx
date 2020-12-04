@@ -1,9 +1,11 @@
 import 'dart:ui';
 import 'package:badges/badges.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:yen/models/post_model.dart';
 import 'package:yen/models/user_model.dart';
+import 'package:yen/src/page/comment/comment_page.dart';
 import 'package:yen/src/page/post/post_page.dart';
 import 'package:yen/src/widget_custom/item_list/post_list_item.dart';
 import 'package:yen/src/widget_custom/line/line.dart';
@@ -53,6 +55,10 @@ class _HomePageState extends State<HomePage> {
       });
     }
   }
+
+  // void _onTapLike() async {}
+
+  // void _onTapComment() async {}
 
   void _getPost(String id) async {
     var text = id.split("_");
@@ -146,6 +152,16 @@ class _HomePageState extends State<HomePage> {
                           pathImage: ListStatic.postList[index].imageUrl == ""
                               ? null
                               : ListStatic.postList[index].imageUrl,
+                          tapComment: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CommentPage(
+                                    post: ListStatic.postList[index]),
+                              ),
+                            );
+                          },
+                          tapLike: () {},
                         );
                       },
                       itemCount: ListStatic.postList.length,
@@ -292,7 +308,8 @@ class _HomePageState extends State<HomePage> {
                   color: Color(0xffCBCBCA),
                   borderRadius: new BorderRadius.all(Radius.circular(50)),
                   image: DecorationImage(
-                    image: NetworkImage(ModelStatic.user.avatarUrl),
+                    image:
+                        CachedNetworkImageProvider(ModelStatic.user.avatarUrl),
                     fit: BoxFit.cover,
                   ),
                 ),
