@@ -6,11 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:toast/toast.dart';
 import 'package:yen/src/page/login/login_page.dart';
+import 'package:yen/src/page/navigation/navigation_page.dart';
 import 'package:yen/src/page/profile/profile_page.dart';
 import 'package:yen/src/widget_custom/button/back_button.dart';
 import 'package:yen/src/widget_custom/button/non_corner_button.dart';
 import 'package:yen/src/widget_custom/textfield/main_textfield.dart';
 import 'package:yen/statics/list_satatic.dart';
+import 'package:yen/statics/string_static.dart';
 
 class RegisterPage extends StatefulWidget {
   final int type;
@@ -26,12 +28,14 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController _email = TextEditingController();
   TextEditingController _password = TextEditingController();
   List<String> _allowedEmailList = List<String>();
+  List<String> _uidList = List<String>();
   // List<String> _idList = List<String>();
   bool _loading = false;
 
   @override
   void initState() {
     _getID();
+    _getIDUser();
     super.initState();
   }
 
@@ -52,6 +56,15 @@ class _RegisterPageState extends State<RegisterPage> {
         _allowedEmailList.add(email);
       });
     }).then((value) {});
+  }
+
+  void _getIDUser() async {
+    await database.collection("Users").get().then((QuerySnapshot snapshot) {
+      snapshot.docs.forEach((value) {
+        _uidList.add(value.id);
+        log(value.id);
+      });
+    });
   }
 
   // void _getMail(String id) async {
@@ -86,8 +99,6 @@ class _RegisterPageState extends State<RegisterPage> {
         var usedList = ListStatic.userAllList
             .where((element) => element.email == email)
             .toList();
-
-        log(usedList.length.toString());
 
         if (usedList.length == 1) {
           Toast.show(
@@ -181,14 +192,23 @@ class _RegisterPageState extends State<RegisterPage> {
         setState(() {
           _loading = false;
         });
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ProfilePage(
-              user: userCredential.user,
+        var check = _uidList
+            .where((element) => element == userCredential.user.uid)
+            .toList();
+        if (check.length == 0) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ProfilePage(
+                user: userCredential.user,
+              ),
             ),
-          ),
-        );
+          );
+        } else {
+          StringStatic.uid = userCredential.user.uid;
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => NavigationPage()));
+        }
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {

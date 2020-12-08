@@ -95,82 +95,94 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xffE2F2F6),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              _headerHomePage(),
-              SizedBox(height: 5),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _textToggle(
-                    callback: () {
-                      setState(() {
-                        _position = 1;
-                      });
-                    },
-                    text: 'NEWS',
-                  ),
-                  _textToggle(
-                    callback: () {
-                      // setState(() {
-                      //   _position = 2;
-                      // });
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => PostPage(),
+      body: ModelStatic.user != null
+          ? SafeArea(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    _headerHomePage(),
+                    SizedBox(height: 5),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _textToggle(
+                          callback: () {
+                            setState(() {
+                              _position = 1;
+                            });
+                          },
+                          text: 'NEWS',
                         ),
-                      );
-                    },
-                    text: 'POST',
-                  ),
-                ],
-              ),
-              _lineToggle(context),
-              _position == 1
-                  ? ListView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        double _width =
-                            MediaQuery.of(context).size.width * 0.65;
-                        return PostListItem(
-                          username: ListStatic.postList[index].displayname,
-                          date: ListStatic.postList[index].timePost,
-                          pathAvater: ListStatic.postList[index].avatarUrl,
-                          width: _width,
-                          text:
-                              "${ListStatic.postList[index].topic}\n${ListStatic.postList[index].content}",
-                          totalComments:
-                              ListStatic.postList[index].comment == null
-                                  ? ""
-                                  : ListStatic.postList[index].comment.length
-                                      .toString(),
-                          totalLike:
-                              ListStatic.postList[index].totalLike.toString(),
-                          pathImage: ListStatic.postList[index].imageUrl == ""
-                              ? null
-                              : ListStatic.postList[index].imageUrl,
-                          tapComment: () {
-                            Navigator.push(
-                              context,
+                        _textToggle(
+                          callback: () {
+                            // setState(() {
+                            //   _position = 2;
+                            // });
+                            Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) => CommentPage(
-                                    post: ListStatic.postList[index]),
+                                builder: (context) => PostPage(),
                               ),
                             );
                           },
-                          tapLike: () {},
-                        );
-                      },
-                      itemCount: ListStatic.postList.length,
-                    )
-                  : Container(),
-            ],
-          ),
-        ),
-      ),
+                          text: 'POST',
+                        ),
+                      ],
+                    ),
+                    _lineToggle(context),
+                    _position == 1
+                        ? ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) {
+                              double _width =
+                                  MediaQuery.of(context).size.width * 0.65;
+                              return PostListItem(
+                                username:
+                                    ListStatic.postList[index].displayname,
+                                date: ListStatic.postList[index].timePost,
+                                pathAvater:
+                                    ListStatic.postList[index].avatarUrl,
+                                width: _width,
+                                text:
+                                    "${ListStatic.postList[index].topic}\n${ListStatic.postList[index].content}",
+                                totalComments:
+                                    ListStatic.postList[index].comment == null
+                                        ? ""
+                                        : ListStatic
+                                            .postList[index].comment.length
+                                            .toString(),
+                                totalLike: ListStatic.postList[index].totalLike
+                                    .toString(),
+                                pathImage:
+                                    ListStatic.postList[index].imageUrl == ""
+                                        ? null
+                                        : ListStatic.postList[index].imageUrl,
+                                tapComment: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => CommentPage(
+                                          post: ListStatic.postList[index]),
+                                    ),
+                                  );
+                                },
+                                tapLike: () {},
+                              );
+                            },
+                            itemCount: ListStatic.postList.length,
+                          )
+                        : Container(),
+                  ],
+                ),
+              ),
+            )
+          : Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            ),
     );
   }
 
