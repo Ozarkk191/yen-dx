@@ -14,7 +14,8 @@ class CommentPage extends StatefulWidget {
 class _CommentPageState extends State<CommentPage> {
   @override
   Widget build(BuildContext context) {
-    double c_width = MediaQuery.of(context).size.width * 0.7;
+    double _cWidth = MediaQuery.of(context).size.width * 0.6;
+    double _cWidth2 = MediaQuery.of(context).size.width * 0.7;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -24,86 +25,85 @@ class _CommentPageState extends State<CommentPage> {
           height: MediaQuery.of(context).size.height,
           child: Stack(
             children: [
-              Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height - 80,
-                child: widget.post.comment.length != 0
-                    ? Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.chat_bubble_outline,
-                            color: Colors.grey,
-                            size: 150,
-                          ),
-                          Text(
-                            'ยังไม่มีความคิดเห็น',
-                            style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            'เป็นคนแรกที่แสดงความคิดเห็น',
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                        ],
-                      )
-                    : ListView.builder(
-                        itemCount: 20,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Container(
-                            width: MediaQuery.of(context).size.width,
-                            child: Column(
-                              children: [
-                                Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
-                                  child: Row(
-                                    children: [
-                                      AvaterProfile(
-                                        pathAvater: ModelStatic.user.avatarUrl,
-                                        size: 60,
-                                      ),
-                                      Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          SizedBox(height: 20),
-                                          Text(
-                                            ModelStatic.user.displayname,
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.bold),
+              SingleChildScrollView(
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  margin: EdgeInsets.only(bottom: 50),
+                  child: Column(
+                    children: [
+                      Card(
+                        child: Container(
+                          padding: EdgeInsets.all(10),
+                          width: MediaQuery.of(context).size.width,
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              AvaterProfile(
+                                pathAvater: widget.post.avatarUrl,
+                                size: 60,
+                              ),
+                              SizedBox(width: 5),
+                              Container(
+                                width: _cWidth2,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    SizedBox(height: 10),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          widget.post.displayname,
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16,
                                           ),
-                                          Container(
-                                            width: c_width,
-                                            child: Text(
-                                              "ModelStatic.user.displayname1234648ejidsfhkudsfwhoeksdflnsdjfnmsgbwoflkm,dshfwoeijwnfksjfieo",
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 12),
-                                              textAlign: TextAlign.left,
-                                            ),
+                                        ),
+                                        SizedBox(width: 5),
+                                        Text(
+                                          widget.post.timePost,
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 10,
                                           ),
-                                        ],
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 20),
+                                    Container(
+                                      width: _cWidth2,
+                                      child: Text(
+                                        widget.post.content,
+                                        style: TextStyle(
+                                            color: Colors.black, fontSize: 12),
+                                        textAlign: TextAlign.left,
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
-                                Container(
-                                  height: 1,
-                                  width: MediaQuery.of(context).size.width,
-                                  color: Colors.black,
-                                ),
-                              ],
-                            ),
-                          );
-                        },
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
+                      SizedBox(height: 20),
+                      widget.post.comment.length != 0
+                          ? _noComment()
+                          : ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: 20,
+                              itemBuilder: (BuildContext context, int index) {
+                                return _commentItem(
+                                  context: context,
+                                  cWidth: _cWidth,
+                                );
+                              },
+                            ),
+                    ],
+                  ),
+                ),
               ),
               Align(
                 alignment: Alignment.bottomCenter,
@@ -144,6 +144,113 @@ class _CommentPageState extends State<CommentPage> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _noComment() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(
+          Icons.chat_bubble_outline,
+          color: Colors.grey,
+          size: 100,
+        ),
+        Text(
+          'ยังไม่มีความคิดเห็น',
+          style: TextStyle(
+            color: Colors.grey,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        Text(
+          'เป็นคนแรกที่แสดงความคิดเห็น',
+          style: TextStyle(color: Colors.grey),
+        ),
+      ],
+    );
+  }
+
+  Container _commentItem({BuildContext context, double cWidth}) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      margin: EdgeInsets.only(left: 20),
+      child: Column(
+        children: [
+          Container(
+            width: MediaQuery.of(context).size.width,
+            margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                AvaterProfile(
+                  pathAvater: ModelStatic.user.avatarUrl,
+                  size: 40,
+                ),
+                SizedBox(width: 5),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(20),
+                        ),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            ModelStatic.user.displayname,
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Container(
+                            width: cWidth,
+                            child: Text(
+                              "ModelStatic.user.displayname1234648ejidsfhkudsfwhoeksdflnsdjfnmsgbwoflkm,dshfwoeijwnfksjfieo",
+                              style:
+                                  TextStyle(color: Colors.black, fontSize: 12),
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 5),
+                    InkWell(
+                      onTap: () {},
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.thumb_up_outlined,
+                            color: Colors.grey,
+                            size: 20,
+                          ),
+                          SizedBox(width: 5),
+                          Text(
+                            'ถูกใจ',
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
