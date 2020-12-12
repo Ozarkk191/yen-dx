@@ -6,7 +6,7 @@ class PostModel {
   String topic;
   String content;
   String timePost;
-  List<dynamic> comment;
+  Map comment;
   int totalLike;
   String imageUrl;
   String id;

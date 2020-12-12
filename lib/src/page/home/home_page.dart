@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:ui';
 import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -71,8 +72,8 @@ class _HomePageState extends State<HomePage> {
         .then((value) {
       PostModel post = PostModel.fromJson(value.data());
 
-      post.id = DateTime.fromMillisecondsSinceEpoch(int.parse(post.id) * 1000)
-          .toString();
+      // post.id = DateTime.fromMillisecondsSinceEpoch(int.parse(post.id) * 1000)
+      //     .toString();
       ListStatic.postList.add(post);
       ListStatic.postList.sort((a, b) => b.id.compareTo(a.id));
       if (this.mounted) {

@@ -1,4 +1,8 @@
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:yen/models/comment_model.dart';
 import 'package:yen/models/post_model.dart';
 import 'package:yen/src/widget_custom/card/avater_profile.dart';
 import 'package:yen/statics/model_satatic.dart';
@@ -12,6 +16,104 @@ class CommentPage extends StatefulWidget {
 }
 
 class _CommentPageState extends State<CommentPage> {
+  List<CommentModel> _commentList = List<CommentModel>();
+  TextEditingController _controller = TextEditingController();
+  // List<dynamic> _commentListDummy = List<dynamic>();
+  String _date = "";
+
+  @override
+  void initState() {
+    log(widget.post.comment.toString());
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _comment(String comment) async {
+    FirebaseFirestore _database = FirebaseFirestore.instance;
+    var day = DateTime.now().day;
+    var year = DateTime.now().year;
+    String month = _month(DateTime.now().month);
+    _date = "$day/$month/$year";
+    dynamic commentModel = CommentModel(
+      avaterUrl: ModelStatic.user.avatarUrl,
+      image: "",
+      name: ModelStatic.user.displayname,
+      text: comment,
+      timecomment: _date,
+    );
+    _commentList.add(commentModel);
+
+    _controller.clear();
+    FocusScope.of(context).requestFocus(new FocusNode());
+
+    // await _database
+    //     .collection("Posts")
+    //     .doc(widget.post.uid)
+    //     .collection("detail")
+    //     .doc(widget.post.id)
+    //     .update({"comment": _commentList}).then((value) {
+    //   setState(() {});
+    // });
+  }
+
+  String _month(int m) {
+    String month = "";
+    switch (m) {
+      case 01:
+      case 1:
+        month = "01";
+        break;
+      case 02:
+      case 2:
+        month = "02";
+        break;
+      case 03:
+      case 3:
+        month = "03";
+        break;
+      case 04:
+      case 4:
+        month = "04";
+        break;
+      case 05:
+      case 5:
+        month = "05";
+        break;
+      case 06:
+      case 6:
+        month = "06";
+        break;
+      case 07:
+      case 7:
+        month = "07";
+        break;
+      case 08:
+      case 8:
+        month = "08";
+        break;
+      case 09:
+      case 9:
+        month = "09";
+        break;
+      case 10:
+        month = "10";
+        break;
+      case 11:
+        month = "11";
+        break;
+      case 12:
+        month = "12";
+        break;
+      default:
+    }
+    return month;
+  }
+
   @override
   Widget build(BuildContext context) {
     double _cWidth = MediaQuery.of(context).size.width * 0.6;
@@ -31,73 +133,105 @@ class _CommentPageState extends State<CommentPage> {
                   margin: EdgeInsets.only(bottom: 50),
                   child: Column(
                     children: [
-                      Card(
-                        child: Container(
-                          padding: EdgeInsets.all(10),
+                      // Card(
+                      //   child: Container(
+                      //     padding: EdgeInsets.all(10),
+                      //     width: MediaQuery.of(context).size.width,
+                      //     child: Row(
+                      //       crossAxisAlignment: CrossAxisAlignment.start,
+                      //       children: [
+                      //         AvaterProfile(
+                      //           pathAvater: widget.post.avatarUrl,
+                      //           size: 60,
+                      //         ),
+                      //         SizedBox(width: 5),
+                      //         Container(
+                      //           width: _cWidth2,
+                      //           child: Column(
+                      //             mainAxisAlignment: MainAxisAlignment.start,
+                      //             children: [
+                      //               SizedBox(height: 10),
+                      //               Row(
+                      //                 children: [
+                      //                   Text(
+                      //                     widget.post.displayname,
+                      //                     style: TextStyle(
+                      //                       color: Colors.black,
+                      //                       fontWeight: FontWeight.bold,
+                      //                       fontSize: 16,
+                      //                     ),
+                      //                   ),
+                      //                   SizedBox(width: 5),
+                      //                   Text(
+                      //                     widget.post.timePost,
+                      //                     style: TextStyle(
+                      //                       color: Colors.grey,
+                      //                       fontWeight: FontWeight.bold,
+                      //                       fontSize: 10,
+                      //                     ),
+                      //                   ),
+                      //                 ],
+                      //               ),
+                      //               SizedBox(height: 20),
+                      //               Container(
+                      //                 width: _cWidth2,
+                      //                 child: Text(
+                      //                   widget.post.content,
+                      //                   style: TextStyle(
+                      //                       color: Colors.black, fontSize: 12),
+                      //                   textAlign: TextAlign.left,
+                      //                 ),
+                      //               ),
+                      //               SizedBox(height: 20),
+                      //               InkWell(
+                      //                 onTap: () {},
+                      //                 child: Row(
+                      //                   children: [
+                      //                     Icon(
+                      //                       Icons.thumb_up_outlined,
+                      //                       color: Colors.grey,
+                      //                       size: 20,
+                      //                     ),
+                      //                     SizedBox(width: 5),
+                      //                     Text(
+                      //                       'ถูกใจ ${widget.post.totalLike}',
+                      //                       style: TextStyle(
+                      //                         color: Colors.grey,
+                      //                         fontSize: 12,
+                      //                       ),
+                      //                     ),
+                      //                   ],
+                      //                 ),
+                      //               ),
+                      //             ],
+                      //           ),
+                      //         ),
+                      //       ],
+                      //     ),
+                      //   ),
+                      // ),
+                      Container(
                           width: MediaQuery.of(context).size.width,
+                          margin: EdgeInsets.fromLTRB(20, 10, 0, 0),
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              AvaterProfile(
-                                pathAvater: widget.post.avatarUrl,
-                                size: 60,
-                              ),
-                              SizedBox(width: 5),
-                              Container(
-                                width: _cWidth2,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    SizedBox(height: 10),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          widget.post.displayname,
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                        SizedBox(width: 5),
-                                        Text(
-                                          widget.post.timePost,
-                                          style: TextStyle(
-                                            color: Colors.grey,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 10,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(height: 20),
-                                    Container(
-                                      width: _cWidth2,
-                                      child: Text(
-                                        widget.post.content,
-                                        style: TextStyle(
-                                            color: Colors.black, fontSize: 12),
-                                        textAlign: TextAlign.left,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
+                              Icon(Icons.arrow_back_ios_outlined),
+                              Text("กลับไปที่โพสต์"),
                             ],
-                          ),
-                        ),
-                      ),
+                          )),
                       SizedBox(height: 20),
-                      widget.post.comment.length != 0
+                      _commentList.length == 0
                           ? _noComment()
                           : ListView.builder(
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
-                              itemCount: 20,
+                              itemCount: _commentList.length,
                               itemBuilder: (BuildContext context, int index) {
                                 return _commentItem(
                                   context: context,
                                   cWidth: _cWidth,
+                                  commentList: _commentList[index],
                                 );
                               },
                             ),
@@ -125,6 +259,7 @@ class _CommentPageState extends State<CommentPage> {
                         children: [
                           Expanded(
                             child: TextField(
+                              controller: _controller,
                               decoration: InputDecoration(
                                 hintText: 'เขียนความคิดเห็น',
                                 border: InputBorder.none,
@@ -134,7 +269,12 @@ class _CommentPageState extends State<CommentPage> {
                           SizedBox(width: 10),
                           Icon(Icons.camera_alt_outlined),
                           SizedBox(width: 10),
-                          Icon(Icons.send),
+                          InkWell(
+                            onTap: () {
+                              _comment(_controller.text);
+                            },
+                            child: Icon(Icons.send),
+                          ),
                         ],
                       ),
                     ),
@@ -149,31 +289,38 @@ class _CommentPageState extends State<CommentPage> {
   }
 
   Widget _noComment() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(
-          Icons.chat_bubble_outline,
-          color: Colors.grey,
-          size: 100,
-        ),
-        Text(
-          'ยังไม่มีความคิดเห็น',
-          style: TextStyle(
+    return Container(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.chat_bubble_outline,
             color: Colors.grey,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
+            size: 100,
           ),
-        ),
-        Text(
-          'เป็นคนแรกที่แสดงความคิดเห็น',
-          style: TextStyle(color: Colors.grey),
-        ),
-      ],
+          Text(
+            'ยังไม่มีความคิดเห็น',
+            style: TextStyle(
+              color: Colors.grey,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Text(
+            'เป็นคนแรกที่แสดงความคิดเห็น',
+            style: TextStyle(color: Colors.grey),
+          ),
+        ],
+      ),
     );
   }
 
-  Container _commentItem({BuildContext context, double cWidth}) {
+  Container _commentItem({
+    BuildContext context,
+    double cWidth,
+    CommentModel commentList,
+  }) {
     return Container(
       width: MediaQuery.of(context).size.width,
       margin: EdgeInsets.only(left: 20),
@@ -186,7 +333,7 @@ class _CommentPageState extends State<CommentPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 AvaterProfile(
-                  pathAvater: ModelStatic.user.avatarUrl,
+                  pathAvater: commentList.avaterUrl,
                   size: 40,
                 ),
                 SizedBox(width: 5),
@@ -206,16 +353,26 @@ class _CommentPageState extends State<CommentPage> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            ModelStatic.user.displayname,
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold),
+                          Row(
+                            children: [
+                              Text(
+                                commentList.name,
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                commentList.timecomment,
+                                style:
+                                    TextStyle(color: Colors.grey, fontSize: 8),
+                                textAlign: TextAlign.left,
+                              ),
+                            ],
                           ),
                           Container(
                             width: cWidth,
                             child: Text(
-                              "ModelStatic.user.displayname1234648ejidsfhkudsfwhoeksdflnsdjfnmsgbwoflkm,dshfwoeijwnfksjfieo",
+                              commentList.text,
                               style:
                                   TextStyle(color: Colors.black, fontSize: 12),
                               textAlign: TextAlign.left,
@@ -225,26 +382,26 @@ class _CommentPageState extends State<CommentPage> {
                       ),
                     ),
                     SizedBox(height: 5),
-                    InkWell(
-                      onTap: () {},
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.thumb_up_outlined,
-                            color: Colors.grey,
-                            size: 20,
-                          ),
-                          SizedBox(width: 5),
-                          Text(
-                            'ถูกใจ',
-                            style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 12,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                    // InkWell(
+                    //   onTap: () {},
+                    //   child: Row(
+                    //     children: [
+                    //       Icon(
+                    //         Icons.thumb_up_outlined,
+                    //         color: Colors.grey,
+                    //         size: 20,
+                    //       ),
+                    //       SizedBox(width: 5),
+                    //       Text(
+                    //         'ถูกใจ',
+                    //         style: TextStyle(
+                    //           color: Colors.grey,
+                    //           fontSize: 12,
+                    //         ),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
                   ],
                 ),
               ],
