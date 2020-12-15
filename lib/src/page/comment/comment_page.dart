@@ -16,7 +16,7 @@ class CommentPage extends StatefulWidget {
 }
 
 class _CommentPageState extends State<CommentPage> {
-  List<CommentModel> _commentList = List<CommentModel>();
+  List<dynamic> _commentList = List<dynamic>();
   TextEditingController _controller = TextEditingController();
   // List<dynamic> _commentListDummy = List<dynamic>();
   String _date = "";
@@ -39,7 +39,7 @@ class _CommentPageState extends State<CommentPage> {
     var year = DateTime.now().year;
     String month = _month(DateTime.now().month);
     _date = "$day/$month/$year";
-    dynamic commentModel = CommentModel(
+    var commentModel = CommentModel(
       avaterUrl: ModelStatic.user.avatarUrl,
       image: "",
       name: ModelStatic.user.displayname,
@@ -47,18 +47,17 @@ class _CommentPageState extends State<CommentPage> {
       timecomment: _date,
     );
     _commentList.add(commentModel);
-
     _controller.clear();
     FocusScope.of(context).requestFocus(new FocusNode());
 
-    // await _database
-    //     .collection("Posts")
-    //     .doc(widget.post.uid)
-    //     .collection("detail")
-    //     .doc(widget.post.id)
-    //     .update({"comment": _commentList}).then((value) {
-    //   setState(() {});
-    // });
+    await _database
+        .collection("Posts")
+        .doc(widget.post.uid)
+        .collection("detail")
+        .doc(widget.post.id)
+        .update({"comment": _commentList}).then((value) {
+      setState(() {});
+    });
   }
 
   String _month(int m) {

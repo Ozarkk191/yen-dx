@@ -21,7 +21,7 @@ class PostPage extends StatefulWidget {
 }
 
 class _PostPageState extends State<PostPage> {
-  Map _commentList = Map();
+  List<dynamic> _commentList = List<dynamic>();
   TextEditingController _topic = TextEditingController();
   TextEditingController _content = TextEditingController();
   String _date = "";
