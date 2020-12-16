@@ -15,12 +15,22 @@ class CommentModel {
     @required this.timecomment,
   });
 
-  CommentModel.fromJson(Map<String, dynamic> json)
-      : avaterUrl = json['avaterUrl'],
-        name = json['name'],
-        text = json['text'],
-        image = json['image'],
-        timecomment = json['timecomment'];
+  // CommentModel.fromJson(Map<String, dynamic> json)
+  // : avaterUrl = json['avaterUrl'],
+  //   name = json['name'],
+  //   text = json['text'],
+  //   image = json['image'],
+  //   timecomment = json['timecomment'];
+
+  factory CommentModel.fromJson(Map<String, dynamic> json) {
+    return CommentModel(
+      avaterUrl: json['avaterUrl'],
+      name: json['name'],
+      text: json['text'],
+      image: json['image'],
+      timecomment: json['timecomment'],
+    );
+  }
 
   toJson() {
     return {

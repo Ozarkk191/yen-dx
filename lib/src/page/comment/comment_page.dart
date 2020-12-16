@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -16,14 +17,18 @@ class CommentPage extends StatefulWidget {
 }
 
 class _CommentPageState extends State<CommentPage> {
-  List<dynamic> _commentList = List<dynamic>();
+  List<CommentModel> _commentList = List<CommentModel>();
+  List<String> _commentList2 = List<String>();
   TextEditingController _controller = TextEditingController();
   // List<dynamic> _commentListDummy = List<dynamic>();
   String _date = "";
 
   @override
   void initState() {
-    log(widget.post.comment.toString());
+    // log(widget.post.uid);
+    // log(widget.post.id);
+    getComment();
+
     super.initState();
   }
 
@@ -33,11 +38,21 @@ class _CommentPageState extends State<CommentPage> {
     super.dispose();
   }
 
+  void getComment() async {
+    for (var i = 0; i < widget.post.comment.length; i++) {
+      Map data = jsonDecode(widget.post.comment[i].toString());
+      CommentModel comment = CommentModel.fromJson(data);
+      _commentList.add(comment);
+      setState(() {});
+    }
+  }
+
   void _comment(String comment) async {
     FirebaseFirestore _database = FirebaseFirestore.instance;
     var day = DateTime.now().day;
     var year = DateTime.now().year;
-    String month = _month(DateTime.now().month);
+    var month = DateTime.now().month;
+    // String month = _month(DateTime.now().month);
     _date = "$day/$month/$year";
     var commentModel = CommentModel(
       avaterUrl: ModelStatic.user.avatarUrl,
@@ -46,6 +61,12 @@ class _CommentPageState extends State<CommentPage> {
       text: comment,
       timecomment: _date,
     );
+
+    var commentStr =
+        "{\"avaterUrl\": \"${ModelStatic.user.avatarUrl}\",\"image\": \"\",\"name\": \"${ModelStatic.user.displayname}\",\"text\": \"$comment\",\"timecomment\": \"$_date\"}";
+
+    log(commentStr);
+    _commentList2.add(commentStr);
     _commentList.add(commentModel);
     _controller.clear();
     FocusScope.of(context).requestFocus(new FocusNode());
@@ -55,62 +76,9 @@ class _CommentPageState extends State<CommentPage> {
         .doc(widget.post.uid)
         .collection("detail")
         .doc(widget.post.id)
-        .update({"comment": _commentList}).then((value) {
+        .update({"comment": _commentList2}).then((value) {
       setState(() {});
     });
-  }
-
-  String _month(int m) {
-    String month = "";
-    switch (m) {
-      case 01:
-      case 1:
-        month = "01";
-        break;
-      case 02:
-      case 2:
-        month = "02";
-        break;
-      case 03:
-      case 3:
-        month = "03";
-        break;
-      case 04:
-      case 4:
-        month = "04";
-        break;
-      case 05:
-      case 5:
-        month = "05";
-        break;
-      case 06:
-      case 6:
-        month = "06";
-        break;
-      case 07:
-      case 7:
-        month = "07";
-        break;
-      case 08:
-      case 8:
-        month = "08";
-        break;
-      case 09:
-      case 9:
-        month = "09";
-        break;
-      case 10:
-        month = "10";
-        break;
-      case 11:
-        month = "11";
-        break;
-      case 12:
-        month = "12";
-        break;
-      default:
-    }
-    return month;
   }
 
   @override
@@ -209,16 +177,21 @@ class _CommentPageState extends State<CommentPage> {
                       //     ),
                       //   ),
                       // ),
-                      Container(
-                          width: MediaQuery.of(context).size.width,
-                          margin: EdgeInsets.fromLTRB(20, 10, 0, 0),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Icon(Icons.arrow_back_ios_outlined),
-                              Text("กลับไปที่โพสต์"),
-                            ],
-                          )),
+                      InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            margin: EdgeInsets.fromLTRB(20, 10, 0, 0),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Icon(Icons.arrow_back_ios_outlined),
+                                Text("กลับไปที่โพสต์"),
+                              ],
+                            )),
+                      ),
                       SizedBox(height: 20),
                       _commentList.length == 0
                           ? _noComment()
