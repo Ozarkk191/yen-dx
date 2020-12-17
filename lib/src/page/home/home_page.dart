@@ -92,6 +92,42 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  void _like(PostModel post, int index) async {
+    FirebaseFirestore _database = FirebaseFirestore.instance;
+    List<dynamic> likeList = List<dynamic>();
+    likeList = post.like;
+    var check =
+        likeList.where((element) => element == ModelStatic.user.uid).toList();
+    if (check.length == 0) {
+      likeList.add(ModelStatic.user.uid);
+    } else {
+      likeList.remove(ModelStatic.user.uid);
+    }
+    await _database
+        .collection("Posts")
+        .doc(post.uid)
+        .collection("detail")
+        .doc(post.id)
+        .update({"like": likeList}).then((value) {
+      ListStatic.postList[index] = post;
+      setState(() {});
+    });
+  }
+
+  _push(BuildContext context, PostModel post, int index) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CommentPage(
+          post: post,
+          index: index,
+        ),
+      ),
+    );
+    print(result.toString());
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -116,9 +152,6 @@ class _HomePageState extends State<HomePage> {
                         ),
                         _textToggle(
                           callback: () {
-                            // setState(() {
-                            //   _position = 2;
-                            // });
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) => PostPage(),
@@ -152,22 +185,30 @@ class _HomePageState extends State<HomePage> {
                                         : ListStatic
                                             .postList[index].comment.length
                                             .toString(),
-                                totalLike: ListStatic.postList[index].totalLike
+                                totalLike: ListStatic
+                                    .postList[index].like.length
                                     .toString(),
                                 pathImage:
                                     ListStatic.postList[index].imageUrl == ""
                                         ? null
                                         : ListStatic.postList[index].imageUrl,
                                 tapComment: () {
-                                  Navigator.push(
+                                  _push(
                                     context,
-                                    MaterialPageRoute(
-                                      builder: (context) => CommentPage(
-                                          post: ListStatic.postList[index]),
-                                    ),
+                                    ListStatic.postList[index],
+                                    index,
                                   );
+                                  // Navigator.push(
+                                  //   context,
+                                  //   MaterialPageRoute(
+                                  //     builder: (context) => CommentPage(
+                                  //         post: ListStatic.postList[index]),
+                                  //   ),
+                                  // );
                                 },
-                                tapLike: () {},
+                                tapLike: () {
+                                  _like(ListStatic.postList[index], index);
+                                },
                               );
                             },
                             itemCount: ListStatic.postList.length,

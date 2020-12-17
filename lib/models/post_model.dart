@@ -7,7 +7,7 @@ class PostModel {
   String content;
   String timePost;
   List<dynamic> comment;
-  int totalLike;
+  List<dynamic> like;
   String imageUrl;
   String id;
   String uid;
@@ -19,7 +19,7 @@ class PostModel {
     this.content,
     @required this.timePost,
     @required this.comment,
-    @required this.totalLike,
+    @required this.like,
     this.imageUrl,
     this.id,
     this.uid,
@@ -32,7 +32,7 @@ class PostModel {
         content = json['content'],
         timePost = json['timePost'],
         comment = json['comment'],
-        totalLike = json['totalLike'],
+        like = json['like'],
         imageUrl = json['imageUrl'],
         id = json['id'],
         uid = json['uid'];
@@ -45,7 +45,7 @@ class PostModel {
       "content": content,
       "timePost": timePost,
       "comment": comment,
-      "totalLike": totalLike,
+      "like": like,
       "imageUrl": imageUrl,
       "id": id,
       "uid": uid,

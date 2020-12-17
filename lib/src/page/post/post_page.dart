@@ -22,6 +22,7 @@ class PostPage extends StatefulWidget {
 
 class _PostPageState extends State<PostPage> {
   List<dynamic> _commentList = List<dynamic>();
+  List<dynamic> _linkList = List<dynamic>();
   TextEditingController _topic = TextEditingController();
   TextEditingController _content = TextEditingController();
   String _date = "";
@@ -142,9 +143,10 @@ class _PostPageState extends State<PostPage> {
       content: _content.text,
       timePost: _date,
       comment: _commentList,
-      totalLike: 0,
+      like: _linkList,
       imageUrl: avatarUrl,
       id: date.toString(),
+      uid: ModelStatic.user.uid,
     );
 
     await _database

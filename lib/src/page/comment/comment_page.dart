@@ -6,12 +6,18 @@ import 'package:flutter/material.dart';
 import 'package:yen/models/comment_model.dart';
 import 'package:yen/models/post_model.dart';
 import 'package:yen/src/widget_custom/card/avater_profile.dart';
+import 'package:yen/statics/list_satatic.dart';
 import 'package:yen/statics/model_satatic.dart';
 
 class CommentPage extends StatefulWidget {
   final PostModel post;
+  final int index;
 
-  const CommentPage({Key key, @required this.post}) : super(key: key);
+  const CommentPage({
+    Key key,
+    @required this.post,
+    this.index,
+  }) : super(key: key);
   @override
   _CommentPageState createState() => _CommentPageState();
 }
@@ -40,6 +46,7 @@ class _CommentPageState extends State<CommentPage> {
 
   void getComment() async {
     for (var i = 0; i < widget.post.comment.length; i++) {
+      _commentList2.add(widget.post.comment[i].toString());
       Map data = jsonDecode(widget.post.comment[i].toString());
       CommentModel comment = CommentModel.fromJson(data);
       _commentList.add(comment);
@@ -71,12 +78,14 @@ class _CommentPageState extends State<CommentPage> {
     _controller.clear();
     FocusScope.of(context).requestFocus(new FocusNode());
 
+    widget.post.comment = _commentList2;
     await _database
         .collection("Posts")
         .doc(widget.post.uid)
         .collection("detail")
         .doc(widget.post.id)
         .update({"comment": _commentList2}).then((value) {
+      ListStatic.postList[widget.index] = widget.post;
       setState(() {});
     });
   }
