@@ -38,7 +38,11 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
   );
 
   void onSend(ChatMessage message) async {
-    print(message.toJson());
+    FirebaseFirestore.instance
+        .collection('Chat')
+        .doc(widget.keyRoom)
+        .set({"key": widget.keyRoom});
+
     var documentReference = FirebaseFirestore.instance
         .collection('Chat')
         .doc(widget.keyRoom)

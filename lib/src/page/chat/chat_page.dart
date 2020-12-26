@@ -16,6 +16,7 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   FirebaseFirestore _database = FirebaseFirestore.instance;
   List<UserModel> _chatList = List<UserModel>();
+  List<String> _keyList = List<String>();
 
   @override
   void initState() {
@@ -23,31 +24,42 @@ class _ChatPageState extends State<ChatPage> {
     super.initState();
   }
 
-  Future<List<UserModel>> getDataId() async {
-    UserModel user;
-    _chatList.clear();
-    for (var i = 0; i < ModelStatic.user.chatList.length; i++) {
-      await _database
-          .collection("Users")
-          .doc(ModelStatic.user.chatList[i])
-          .get()
-          .then((value) {
-        user = UserModel.fromJson(value.data());
-      }).then((value) {
-        _chatList.add(user);
-      });
-    }
-
-    return _chatList;
-  }
-
   void _getPostUID() async {
-    // FirebaseFirestore _database = FirebaseFirestore.instance;
-
+    List<String> keyList = List<String>();
+    List<String> keyList2 = List<String>();
+    _chatList.clear();
     await _database.collection("Chat").get().then((QuerySnapshot snapshot) {
       snapshot.docs.forEach((value) {
-        log("${value.id}");
+        keyList.add(value.id);
       });
+    }).then((value) {
+      keyList2 = keyList
+          .where((element) => element.contains(ModelStatic.user.uid))
+          .toList();
+      if (keyList2.length != 0) {
+        for (var i = 0; i < keyList2.length; i++) {
+          var strSplit = keyList2[i].split("_");
+
+          for (var j = 0; j < strSplit.length; j++) {
+            // log(strSplit[j]);
+            if (strSplit[j] != ModelStatic.user.uid) {
+              UserModel user;
+              _database
+                  .collection("Users")
+                  .doc(strSplit[j])
+                  .get()
+                  .then((value) {
+                user = UserModel.fromJson(value.data());
+              }).then((value) {
+                _keyList.add(keyList2[i]);
+                log(keyList2[i]);
+                _chatList.add(user);
+                setState(() {});
+              });
+            }
+          }
+        }
+      }
     });
   }
 
@@ -62,74 +74,54 @@ class _ChatPageState extends State<ChatPage> {
             child: Column(
               children: [
                 _headerContainer(context),
-                FutureBuilder(
-                  future: getDataId(),
-                  builder:
-                      (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                    if (snapshot.hasData) {
-                      return Expanded(
-                        child: ListView.builder(
-                          itemCount: _chatList.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Container(
-                              margin: EdgeInsets.fromLTRB(20, 5, 20, 5),
-                              width: MediaQuery.of(context).size.width * 0.8,
-                              height: 80,
-                              child: InkWell(
-                                onTap: () {
-                                  List<String> list = [
-                                    ModelStatic.user.uid,
-                                    _chatList[index].uid,
-                                  ];
-                                  list.sort((a, b) => a.compareTo(b));
-                                  String key = "${list[0]}_${list[1]}";
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (contaxt) => ChatRoomPage(
-                                        keyRoom: key,
-                                        user: _chatList[index],
-                                      ),
-                                    ),
-                                  );
-                                },
-                                child: Card(
-                                  elevation: 5,
-                                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      SizedBox(width: 10),
-                                      AvaterProfile(
-                                        pathAvater: _chatList[index].avatarUrl,
-                                        size: 60,
-                                        maginRight: 10,
-                                      ),
-                                      Text(
-                                        _chatList[index].displayname,
-                                        style: TextStyle(
-                                            color: Colors.grey[800],
-                                            fontSize: 20),
-                                      )
-                                    ],
-                                  ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: _chatList.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Container(
+                        margin: EdgeInsets.fromLTRB(20, 5, 20, 5),
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        height: 80,
+                        child: InkWell(
+                          onTap: () {
+                            String key = _keyList[index];
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (contaxt) => ChatRoomPage(
+                                  keyRoom: key,
+                                  user: _chatList[index],
                                 ),
                               ),
                             );
                           },
+                          child: Card(
+                            elevation: 5,
+                            clipBehavior: Clip.antiAliasWithSaveLayer,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Row(
+                              children: [
+                                SizedBox(width: 10),
+                                AvaterProfile(
+                                  pathAvater: _chatList[index].avatarUrl,
+                                  size: 60,
+                                  maginRight: 10,
+                                ),
+                                Text(
+                                  _chatList[index].displayname,
+                                  style: TextStyle(
+                                      color: Colors.grey[800], fontSize: 20),
+                                )
+                              ],
+                            ),
+                          ),
                         ),
                       );
-                    } else {
-                      return Expanded(
-                        child: Center(
-                          child: Container(),
-                        ),
-                      );
-                    }
-                  },
-                ),
+                    },
+                  ),
+                )
               ],
             ),
           ),

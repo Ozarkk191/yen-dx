@@ -30,6 +30,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     _getData();
     _getPostID();
+    _getAllUser();
     // _getPost();
     super.initState();
   }
@@ -80,6 +81,24 @@ class _HomePageState extends State<HomePage> {
         setState(() {});
       }
     });
+  }
+
+  void _getAllUser() async {
+    ListStatic.allUserList.clear();
+    for (var i = 0; i < ListStatic.uidList.length; i++) {
+      _database = FirebaseFirestore.instance;
+      await _database
+          .collection("Users")
+          .doc(ListStatic.uidList[i])
+          .get()
+          .then((value) {
+        UserModel user = UserModel.fromJson(value.data());
+        ListStatic.allUserList.add(user);
+        if (this.mounted) {
+          setState(() {});
+        }
+      });
+    }
   }
 
   void _getData() async {

@@ -15,7 +15,6 @@ class MemberPage extends StatefulWidget {
 
 class _MemberPageState extends State<MemberPage> {
   FirebaseFirestore _database = FirebaseFirestore.instance;
-  List<UserModel> _userList = List<UserModel>();
   final arrCountry = [
     "assets/images/thai.png",
     "assets/images/cambodia.png",
@@ -35,25 +34,7 @@ class _MemberPageState extends State<MemberPage> {
 
   @override
   void initState() {
-    _getAllUser();
     super.initState();
-  }
-
-  void _getAllUser() async {
-    for (var i = 0; i < ListStatic.uidList.length; i++) {
-      _database = FirebaseFirestore.instance;
-      await _database
-          .collection("Users")
-          .doc(ListStatic.uidList[i])
-          .get()
-          .then((value) {
-        UserModel user = UserModel.fromJson(value.data());
-        _userList.add(user);
-        if (this.mounted) {
-          setState(() {});
-        }
-      });
-    }
   }
 
   @override
@@ -78,7 +59,7 @@ class _MemberPageState extends State<MemberPage> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => MemberListPage(
-                            userList: _userList,
+                            userList: ListStatic.allUserList,
                             country: index,
                           ),
                         ),
