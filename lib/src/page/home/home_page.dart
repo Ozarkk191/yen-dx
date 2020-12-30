@@ -328,40 +328,40 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SearchTextField(),
-                InkWell(
-                  onTap: () {},
-                  child: Container(
-                    width: 50,
-                    height: 70,
-                    alignment: Alignment.topCenter,
-                    child: Badge(
-                      badgeColor: Color(0xffF5EA14),
-                      alignment: Alignment.center,
-                      position: BadgePosition(end: 0, top: 15),
-                      child: PopupMenuButton<String>(
-                          icon: Icon(
-                            Icons.notifications_none,
-                            size: 50,
-                            color: Colors.white,
-                          ),
-                          color: Color(0xffffffff),
-                          onSelected: (value) {
-                            _selecteMenu(value, context);
-                          },
-                          itemBuilder: (BuildContext context) {
-                            return menuList.map((String menu) {
-                              return PopupMenuItem<String>(
-                                value: menu,
-                                child: Text(
-                                  menu,
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                              );
-                            }).toList();
-                          }),
-                    ),
-                  ),
-                )
+                // InkWell(
+                //   onTap: () {},
+                //   child: Container(
+                //     width: 50,
+                //     height: 70,
+                //     alignment: Alignment.topCenter,
+                //     child: Badge(
+                //       badgeColor: Color(0xffF5EA14),
+                //       alignment: Alignment.center,
+                //       position: BadgePosition(end: 0, top: 15),
+                //       child: PopupMenuButton<String>(
+                //           icon: Icon(
+                //             Icons.notifications_none,
+                //             size: 50,
+                //             color: Colors.white,
+                //           ),
+                //           color: Color(0xffffffff),
+                //           onSelected: (value) {
+                //             _selecteMenu(value, context);
+                //           },
+                //           itemBuilder: (BuildContext context) {
+                //             return menuList.map((String menu) {
+                //               return PopupMenuItem<String>(
+                //                 value: menu,
+                //                 child: Text(
+                //                   menu,
+                //                   style: TextStyle(color: Colors.black),
+                //                 ),
+                //               );
+                //             }).toList();
+                //           }),
+                //     ),
+                //   ),
+                // )
               ],
             ),
           ),
