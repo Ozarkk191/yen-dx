@@ -23,8 +23,8 @@ class CommentPage extends StatefulWidget {
 }
 
 class _CommentPageState extends State<CommentPage> {
-  List<CommentModel> _commentList = List<CommentModel>();
-  List<String> _commentList2 = List<String>();
+  List<CommentModel> _commentList = <CommentModel>[];
+  List<String> _commentList2 = <String>[];
   TextEditingController _controller = TextEditingController();
   // List<dynamic> _commentListDummy = List<dynamic>();
   String _date = "";
@@ -93,7 +93,7 @@ class _CommentPageState extends State<CommentPage> {
   @override
   Widget build(BuildContext context) {
     double _cWidth = MediaQuery.of(context).size.width * 0.6;
-    double _cWidth2 = MediaQuery.of(context).size.width * 0.7;
+    // double _cWidth2 = MediaQuery.of(context).size.width * 0.7;
 
     return Scaffold(
       backgroundColor: Colors.white,

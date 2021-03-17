@@ -1,34 +1,33 @@
 {
   "project_info": {
-    "project_number": "199737168749",
-    "firebase_url": "https://yendxchat.firebaseio.com",
-    "project_id": "yendxchat",
-    "storage_bucket": "yendxchat.appspot.com"
+    "project_number": "368184440569",
+    "project_id": "yen-dx",
+    "storage_bucket": "yen-dx.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:199737168749:android:cc2c82d8ec2d45dd554064",
+        "mobilesdk_app_id": "1:368184440569:android:00195f9ae42c30b68f1428",
         "android_client_info": {
-          "package_name": "com.fare.yendx"
+          "package_name": "com.test.yendx"
         }
       },
       "oauth_client": [
         {
-          "client_id": "199737168749-58242gu02uvit1431n1cs7lkdi5a2i1m.apps.googleusercontent.com",
+          "client_id": "368184440569-hs4vpvibu87dg5n7vjo00n29g54h3prl.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCViPeyhI44df02zkTnQSMfjexNp1lqjWY"
+          "current_key": "AIzaSyD5W3mVpqs2wQ5Rild-ElXAKBuE8_HEe8k"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "199737168749-58242gu02uvit1431n1cs7lkdi5a2i1m.apps.googleusercontent.com",
+              "client_id": "368184440569-hs4vpvibu87dg5n7vjo00n29g54h3prl.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

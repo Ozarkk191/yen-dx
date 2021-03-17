@@ -15,8 +15,8 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   FirebaseFirestore _database = FirebaseFirestore.instance;
-  List<UserModel> _chatList = List<UserModel>();
-  List<String> _keyList = List<String>();
+  List<UserModel> _chatList = <UserModel>[];
+  List<String> _keyList = <String>[];
 
   @override
   void initState() {
@@ -25,8 +25,8 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   void _getPostUID() async {
-    List<String> keyList = List<String>();
-    List<String> keyList2 = List<String>();
+    List<String> keyList = <String>[];
+    List<String> keyList2 = <String>[];
     _chatList.clear();
     await _database.collection("Chat").get().then((QuerySnapshot snapshot) {
       snapshot.docs.forEach((value) {

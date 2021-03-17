@@ -1,6 +1,4 @@
-import 'dart:developer';
 import 'dart:ui';
-import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -113,7 +111,7 @@ class _HomePageState extends State<HomePage> {
 
   void _like(PostModel post, int index) async {
     FirebaseFirestore _database = FirebaseFirestore.instance;
-    List<dynamic> likeList = List<dynamic>();
+    List<dynamic> likeList = <dynamic>[];
     likeList = post.like;
     var check =
         likeList.where((element) => element == ModelStatic.user.uid).toList();
@@ -247,9 +245,9 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void _selecteMenu(String menu, BuildContext context) {
-    // _logout();
-  }
+  // void _selecteMenu(String menu, BuildContext context) {
+  //   // _logout();
+  // }
 
   Stack _lineToggle(BuildContext context) {
     return Stack(

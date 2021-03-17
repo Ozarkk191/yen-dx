@@ -1,4 +1,4 @@
-package com.fare.yendx
+package com.test.yendx
 
 import io.flutter.embedding.android.FlutterActivity
 

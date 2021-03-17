@@ -19,7 +19,7 @@ class MemberListPage extends StatefulWidget {
 }
 
 class _MemberListPageState extends State<MemberListPage> {
-  List<UserModel> _userList = List<UserModel>();
+  List<UserModel> _userList = <UserModel>[];
   @override
   void initState() {
     _fillter(widget.country);

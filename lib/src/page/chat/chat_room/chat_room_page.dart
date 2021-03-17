@@ -23,8 +23,8 @@ class ChatRoomPage extends StatefulWidget {
 
 class _ChatRoomPageState extends State<ChatRoomPage> {
   final GlobalKey<DashChatState> _chatViewKey = GlobalKey<DashChatState>();
-  List<ChatMessage> messages = List<ChatMessage>();
-  var m = List<ChatMessage>();
+  List<ChatMessage> messages = <ChatMessage>[];
+  var m = <ChatMessage>[];
   var i = 0;
   File _image;
   final picker = ImagePicker();

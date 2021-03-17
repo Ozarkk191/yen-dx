@@ -16,7 +16,7 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
-  List<String> _uidList = List<String>();
+  List<String> _uidList = <String>[];
   void _timer() {
     Timer(Duration(seconds: 3), () {
       Navigator.pushReplacement(

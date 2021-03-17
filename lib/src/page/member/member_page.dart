@@ -1,6 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:yen/models/user_model.dart';
 import 'package:yen/src/widget_custom/card/avater_profile.dart';
 import 'package:yen/src/widget_custom/icon/icon_and_text.dart';
 import 'package:yen/statics/list_satatic.dart';
@@ -14,7 +13,7 @@ class MemberPage extends StatefulWidget {
 }
 
 class _MemberPageState extends State<MemberPage> {
-  FirebaseFirestore _database = FirebaseFirestore.instance;
+  // FirebaseFirestore _database = FirebaseFirestore.instance;
   final arrCountry = [
     "assets/images/thai.png",
     "assets/images/cambodia.png",

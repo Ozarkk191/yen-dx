@@ -27,8 +27,8 @@ class _RegisterPageState extends State<RegisterPage> {
   FirebaseFirestore database = FirebaseFirestore.instance;
   TextEditingController _email = TextEditingController();
   TextEditingController _password = TextEditingController();
-  List<String> _allowedEmailList = List<String>();
-  List<String> _uidList = List<String>();
+  List<String> _allowedEmailList = <String>[];
+  List<String> _uidList = <String>[];
   // List<String> _idList = List<String>();
   bool _loading = false;
 
